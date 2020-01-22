@@ -1,0 +1,114 @@
+# Translations template for ckanext-emailasusername.
+# Copyright (C) 2020 ORGANIZATION
+# This file is distributed under the same license as the ckanext-emailasusername
+# project.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: ckanext-emailasusername 0.0.1\n"
+"Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
+"POT-Creation-Date: 2020-01-22 09:07+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.3.4\n"
+
+#: ckanext/emailasusername/blueprint.py:34
+#, python-format
+msgid "No such user: %s"
+msgstr ""
+
+#: ckanext/emailasusername/blueprint.py:51
+msgid "Please check your inbox for a reset code."
+msgstr ""
+
+#: ckanext/emailasusername/blueprint.py:54
+msgid "Could not send reset link: {}"
+msgstr ""
+
+#: ckanext/emailasusername/plugin.py:70
+msgid "An account is already registered to that email."
+msgstr ""
+
+#: ckanext/emailasusername/plugin.py:82
+msgid "Please enter your email in both email fields"
+msgstr ""
+
+#: ckanext/emailasusername/plugin.py:92
+msgid "You did not retype your email correctly"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:5
+msgid "Username"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:5
+msgid "username"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:6
+msgid "Full Name"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:6
+msgid "Joe Bloggs"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:7
+msgid "Email"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:7
+#: ckanext/emailasusername/templates/user/new_user_form.html:8
+msgid "joe@example.com"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:8
+msgid "Confirm Email"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:9
+#: ckanext/emailasusername/templates/user/snippets/login_form.html:22
+msgid "Password"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:10
+msgid "Confirm Password"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:20
+msgid "Create Account"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/request_reset.html:6
+#: ckanext/emailasusername/templates/user/snippets/login_form.html:20
+msgid "Username or Email"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/request_reset.html:11
+msgid "Request Reset"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/request_reset.html:20
+msgid "How does this work?"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/request_reset.html:22
+msgid ""
+"Enter your username or email into the box and we will send you an email with "
+"a link to enter a new password."
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/snippets/login_form.html:24
+msgid "Remember me"
+msgstr ""
+
+#: ckanext/emailasusername/templates/user/snippets/login_form.html:28
+msgid "Login"
+msgstr ""
+

@@ -4,17 +4,19 @@ import ckan.plugins.toolkit as toolkit
 import ckan.logic.schema as schema
 import logging
 from blueprint import emailasusername
+from ckan.lib.plugins import DefaultTranslation
 from ckan.common import _
 from six import text_type
 
 log = logging.getLogger(__name__)
 
 
-class EmailasusernamePlugin(plugins.SingletonPlugin):
+class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     plugins.implements(plugins.interfaces.IConfigurer)
     plugins.implements(plugins.interfaces.IValidators)
     plugins.implements(plugins.interfaces.IBlueprint)
+    plugins.implements(plugins.interfaces.ITranslation)
 
     # IConfigurer
     def update_config(self, config_):
