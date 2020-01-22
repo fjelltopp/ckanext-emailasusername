@@ -5,6 +5,7 @@ import ckan.logic.schema as schema
 import logging
 from blueprint import emailasusername
 from ckan.lib.plugins import DefaultTranslation
+from ckan.model import User
 from ckan.common import _
 from six import text_type
 
@@ -53,17 +54,14 @@ def emailasusername_new_user_schema(
     emailasusername_schema['email'] = [unicode_safe, email_validator]
     emailasusername_schema['email1'] = [
         user_emails_match, user_both_emails_entered, not_empty,
-        unicode_safe, email_validator, email_exists,
-
+        unicode_safe, email_validator, email_exists
     ]
     emailasusername_schema['email2'] = [not_empty]
     return emailasusername_schema
 
 
 def email_exists(key, data, errors, context):
-    model = context['model']
-    session = context['session']
-    result = session.query(model.User).filter_by(email=data[key]).first()
+    result = User.by_email(data[key])
     if result:
         errors[('email',)] = errors.get(key, [])
         errors[('email',)] = [
@@ -72,10 +70,8 @@ def email_exists(key, data, errors, context):
 
 
 def user_both_emails_entered(key, data, errors, context):
-    log.warning(data)
     email1 = data.get(('email1',), None)
     email2 = data.get(('email2',), None)
-    log.warning("EMAILS {} {}".format(email1, email2))
     if email1 is None or email1 == '' or \
        email2 is None or email2 == '':
         errors[('email',)].append(
@@ -84,12 +80,11 @@ def user_both_emails_entered(key, data, errors, context):
 
 
 def user_emails_match(key, data, errors, context):
-    log.warning(data)
     email1 = data.get(('email1',), None)
     email2 = data.get(('email2',), None)
-    log.warning("EMAILS {} {}".format(email1, email2))
     if not email1 == email2:
-        errors[('email',)].append(_('You did not retype your email correctly'))
+        errors[('email',)].append(
+            _('You did not retype your email correctly')
+        )
     else:
-        #  Set correct email
         data[('email',)] = email1

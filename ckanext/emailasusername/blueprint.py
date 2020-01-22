@@ -28,27 +28,20 @@ def user_by_username_or_email(login):
         if len(user_list) == 1:
             return user_list[0]
         elif len(user_list) > 1:
-            h.flash_error("Multiple users with email: {}".format(login))
+            h.flash_error(_(u'Multiple users with email: {}').format(login))
             return None
         else:
-            h.flash_error(_(u'No such user: %s') % login)
+            h.flash_error(_(u'No such user: {}').format(login))
             return None
 
 
 def request_reset():
-    log.warning("Reset called")
-
     id = request.form.get(u'user')
-    user_obj = None
     user_obj = user_by_username_or_email(id)
-
     if user_obj:
         try:
-            # FIXME: How about passing user.id instead? Mailer already
-            # uses model and it allow to simplify code above
             mailer.send_reset_link(user_obj)
-            h.flash_success(
-                _(u'Please check your inbox for a reset code.'))
+            h.flash_success(_(u'Please check your inbox for a reset code.'))
             return h.redirect_to(h.url_for('user.login'))
         except mailer.MailerException as e:
             h.flash_error(_(u'Could not send reset link: {}').format(e))
