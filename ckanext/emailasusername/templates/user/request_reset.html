@@ -1,0 +1,27 @@
+{% ckan_extends %}
+
+{% block form %}
+  <form action="/emailasusername/reset" method="post">
+    <div class="form-group">
+      <label for="field-username">{{ _('Username or Email') }}</label>
+      <input id="field-username" class="control-medium form-control" name="user" value="" type="text" />
+    </div>
+    <div class="form-actions">
+      {% block form_button %}
+      <button class="btn btn-primary" type="submit" name="reset">{{ _("Request Reset") }}</button>
+      {% endblock %}
+    </div>
+  </form>
+{% endblock %}
+
+{% block help %}
+<section class="module module-narrow module-shallow">
+  {% block help_inner %}
+  <h2 class="module-heading">{{ _('How does this work?') }}</h2>
+  <div class="module-content">
+    <p>{% trans %}Enter your username or email into the box and we will send you
+    an email with a link to enter a new password.{% endtrans %}</p>
+  </div>
+  {% endblock %}
+</section>
+{% endblock %}
