@@ -55,6 +55,11 @@ cd ckan
 paster db init -c test-core.ini
 cd -
 
+echo ""
+echo "DEBUG============================"
+pwd
+ls
+
 echo "Installing ckanext-emailasusername and its requirements..."
 sudo python setup.py develop
 pip install --user -r dev-requirements.txt
