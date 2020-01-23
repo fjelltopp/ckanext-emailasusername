@@ -174,10 +174,10 @@ With thanks...
 This extension has been built by Fjelltopp with funding from UNAIDS as part of
 the AIDS Data Repository project: `https://adr.unaids.org <https://adr.unaids.org>`_
 
-.. image:: https://docs.google.com/a/unaids.org/uc?id=0ByKFPfgVtJ6RMlRjdDNVMFhkb0U&
-  :width: 450
+.. image:: https://hivtools.unaids.org/images/unaids.png
+  :width: 400
   :alt: UNAIDS
 
-.. image:: https://image.ibb.co/jOxDp7/Fjelltopp_Text_Colour.png
+.. image:: https://hivtools.unaids.org/images/FjelltoppColourBlue.png
   :width: 400
   :alt: Fjelltopp
