@@ -57,6 +57,7 @@ cd -
 
 echo "Installing ckanext-emailasusername and its requirements..."
 sudo python setup.py develop
+pip install --user -r dev-requirements.txt
 
 echo "Moving test.ini into a subdir..."
 mkdir subdir
