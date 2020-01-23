@@ -34,7 +34,7 @@ ckanext-emailasusername
 
 We have have found that many of our users quickly forget their CKAN username. 
 We have also observed several users assume they should use their email to 
-login.  This fails with a bad login error message, which causes some cnfusion.
+login.  This fails with a bad login error message, which causes some confusion.
 
 This CKAN extension allows users to login or reset their password with either
 their email address or their username. It doesn't do away with the username
