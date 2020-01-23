@@ -1,13 +1,15 @@
-language: python
-sudo: required
+dist: trusty
+group: deprecated-2017Q4
 python:
-    - "2.7"
+- 2.7
+env:
+- CKANVERSION=2.8.2
 services:
-    - postgresql
-    - redis-server
+- postgresql
+- redis-server
 install:
-    - bash bin/travis-build.bash
-    - pip install coveralls
+- bash bin/travis-build.bash
+- pip install coveralls
 script: sh bin/travis-run.sh
 after_success:
-    - coveralls
+- coveralls

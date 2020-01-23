@@ -2,11 +2,11 @@
    these badges work. The necessary Travis and Coverage config files have been
    generated for you.
 
-.. image:: https://travis-ci.org/jonathansberry/ckanext-emailasusername.svg?branch=master
-    :target: https://travis-ci.org/jonathansberry/ckanext-emailasusername
+.. image:: https://travis-ci.org/fjelltopp/ckanext-emailasusername.svg?branch=master
+    :target: https://travis-ci.org/fjelltopp/ckanext-emailasusername
 
-.. image:: https://coveralls.io/repos/jonathansberry/ckanext-emailasusername/badge.svg
-  :target: https://coveralls.io/r/jonathansberry/ckanext-emailasusername
+.. image:: https://coveralls.io/repos/fjelltopp/ckanext-emailasusername/badge.svg
+  :target: https://coveralls.io/r/fjelltopp/ckanext-emailasusername
 
 .. image:: https://pypip.in/download/ckanext-emailasusername/badge.svg
     :target: https://pypi.python.org/pypi//ckanext-emailasusername/
@@ -32,10 +32,24 @@
 ckanext-emailasusername
 =============
 
-.. Put a description of your extension here:
-   What does it do? What features does it have?
-   Consider including some screenshots or embedding a video!
+We have have found that many of our users quickly forget their CKAN username. 
+We have also observed several users assume they should use their email to 
+login.  This fails with a bad login error message, which causes some confusion.
 
+This CKAN extension allows users to login or reset their password with either
+their email address or their username. It doesn't do away with the username
+but just offers the option to use email instead.
+
+Out of the box, CKAN allows multiple accounts to be registered with the same
+email address.  This causes a problem for using email to identify the user.
+This extension therefore adds a validator to the registration form to stop 
+new accounts being created if there already exists an account with the same
+email.
+
+If multiple accounts are registered to your email, then identifying the user 
+by email fails - you must use your username to login/reset your password
+instead. It's recommended, if feasible, to work with your userbase to phase 
+out multiple accounts with the same email.
 
 ------------
 Requirements
@@ -67,33 +81,21 @@ To install ckanext-emailasusername:
    config file (by default the config file is located at
    ``/etc/ckan/default/production.ini``).
 
-4. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu::
+4. Configure CKAN to use the authenticator provided in this plugin. Add
+   ``ckanext.emailasusername.authenticator:EmailAsUsernameAuthenticator`` to
+   the ``[authenticators] plugins`` configuration in CKAN's who.ini file. In
+   ckan core, thise who.ini file is stored in ``ckan/ckan/config`` and linked
+   to from ``ckan/``::
+
+       [authenticators]
+       plugins =
+           auth_tkt
+           ckanext.emailasusername.authenticator:EmailAsUsernameAuthenticator
+
+
+5. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu::
 
      sudo service apache2 reload
-
-
----------------
-Config Settings
----------------
-
-Document any optional config settings here. For example::
-
-    # The minimum number of hours to wait before re-checking a resource
-    # (optional, default: 24).
-    ckanext.emailasusername.some_setting = some_default_value
-
-
-------------------------
-Development Installation
-------------------------
-
-To install ckanext-emailasusername for development, activate your CKAN virtualenv and
-do::
-
-    git clone https://github.com/jonathansberry/ckanext-emailasusername.git
-    cd ckanext-emailasusername
-    python setup.py develop
-    pip install -r dev-requirements.txt
 
 
 -----------------
@@ -164,3 +166,18 @@ To publish a new version to PyPI follow these steps:
 
        git tag 0.0.2
        git push --tags
+
+-----------
+With thanks...
+-----------
+
+This extension has been built by Fjelltopp with funding from UNAIDS as part of
+the AIDS Data Repository project: `https://adr.unaids.org <https://adr.unaids.org>`_
+
+.. image:: https://hivtools.unaids.org/images/unaids.png
+  :width: 400
+  :alt: UNAIDS
+
+.. image:: https://hivtools.unaids.org/images/FjelltoppColourBlue.png
+  :width: 400
+  :alt: Fjelltopp
