@@ -2,11 +2,11 @@
    these badges work. The necessary Travis and Coverage config files have been
    generated for you.
 
-.. image:: https://travis-ci.org/jonathansberry/ckanext-emailasusername.svg?branch=master
-    :target: https://travis-ci.org/jonathansberry/ckanext-emailasusername
+.. image:: https://travis-ci.org/fjelltopp/ckanext-emailasusername.svg?branch=master
+    :target: https://travis-ci.org/fjelltopp/ckanext-emailasusername
 
-.. image:: https://coveralls.io/repos/jonathansberry/ckanext-emailasusername/badge.svg
-  :target: https://coveralls.io/r/jonathansberry/ckanext-emailasusername
+.. image:: https://coveralls.io/repos/fjelltopp/ckanext-emailasusername/badge.svg
+  :target: https://coveralls.io/r/fjelltopp/ckanext-emailasusername
 
 .. image:: https://pypip.in/download/ckanext-emailasusername/badge.svg
     :target: https://pypi.python.org/pypi//ckanext-emailasusername/
@@ -32,10 +32,12 @@
 ckanext-emailasusername
 =============
 
-.. Put a description of your extension here:
-   What does it do? What features does it have?
-   Consider including some screenshots or embedding a video!
-
+This CKAN extension allows users to login or reset their password with their
+email address as well as their username.  If multiple accounts are registered
+to your email, you must use your username to login instead. The
+extension adds validators to the registration form to ensure that no new
+accounts can be created with an email address already attached to another
+account.
 
 ------------
 Requirements
@@ -67,33 +69,21 @@ To install ckanext-emailasusername:
    config file (by default the config file is located at
    ``/etc/ckan/default/production.ini``).
 
-4. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu::
+4. Configure CKAN to use the authenticator provided in this plugin. Add
+   ``ckanext.emailasusername.authenticator:EmailAsUsernameAuthenticator`` to
+   the ``[authenticators] plugins`` configuration in CKAN's who.ini file. In
+   ckan core, thise who.ini file is stored in ``ckan/ckan/config`` and linked
+   to from ``ckan/``::
+
+       [authenticators]
+       plugins =
+           auth_tkt
+           ckanext.emailasusername.authenticator:EmailAsUsernameAuthenticator
+
+
+5. Restart CKAN. For example if you've deployed CKAN with Apache on Ubuntu::
 
      sudo service apache2 reload
-
-
----------------
-Config Settings
----------------
-
-Document any optional config settings here. For example::
-
-    # The minimum number of hours to wait before re-checking a resource
-    # (optional, default: 24).
-    ckanext.emailasusername.some_setting = some_default_value
-
-
-------------------------
-Development Installation
-------------------------
-
-To install ckanext-emailasusername for development, activate your CKAN virtualenv and
-do::
-
-    git clone https://github.com/jonathansberry/ckanext-emailasusername.git
-    cd ckanext-emailasusername
-    python setup.py develop
-    pip install -r dev-requirements.txt
 
 
 -----------------
