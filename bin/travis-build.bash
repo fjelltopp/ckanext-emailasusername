@@ -3,6 +3,9 @@ set -e
 
 echo "This is travis-build.bash..."
 
+echo "Postgres version"
+psql --version
+
 echo "Installing the packages that CKAN requires..."
 sudo apt-get update -qq
 sudo apt-get install solr-jetty
@@ -13,9 +16,6 @@ cd ckan
 export latest_ckan_release_branch=`git branch --all | grep remotes/origin/release-v | sort -r | sed 's/remotes\/origin\///g' | head -n 1`
 echo "CKAN branch: $latest_ckan_release_branch"
 git checkout $latest_ckan_release_branch
-# Unpin CKAN's psycopg2 dependency get an important bugfix
-# https://stackoverflow.com/questions/47044854/error-installing-psycopg2-2-6-2
-sed -i '/psycopg2/c\psycopg2' requirements.txt
 python setup.py develop
 pip install -r requirements.txt
 pip install -r dev-requirements.txt
