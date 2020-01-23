@@ -32,12 +32,24 @@
 ckanext-emailasusername
 =============
 
-This CKAN extension allows users to login or reset their password with their
-email address as well as their username.  If multiple accounts are registered
-to your email, you must use your username to login instead. The
-extension adds validators to the registration form to ensure that no new
-accounts can be created with an email address already attached to another
-account.
+We have have found that many of our users quickly forget their CKAN username. 
+We have also observed several users assume they should use their email to 
+login.  This fails with a bad login error message, which causes some cnfusion.
+
+This CKAN extension allows users to login or reset their password with either
+their email address or their username. It doesn't do away with the username
+but just offers the option to use email instead.
+
+Out of the box, CKAN allows multiple accounts to be registered with the same
+email address.  This causes a problem for using email to identify the user.
+This extension therefore adds a validator to the registration form to stop 
+new accounts being created if there already exists an account with the same
+email.
+
+If multiple accounts are registered to your email, then identifying the user 
+by email fails - you must use your username to login/reset your password
+instead. It's recommended, if feasible, to work with your userbase to phase 
+out multiple accounts with the same email.
 
 ------------
 Requirements
@@ -163,9 +175,9 @@ This extension has been built by Fjelltopp with funding from UNAIDS as part of
 the AIDS Data Repository project: `https://adr.unaids.org <https://adr.unaids.org>`_
 
 .. image:: https://docs.google.com/a/unaids.org/uc?id=0ByKFPfgVtJ6RMlRjdDNVMFhkb0U&
-  :width: 400
+  :width: 450
   :alt: UNAIDS
 
-.. image:: https://previews.dropbox.com/p/thumb/AAr0hD-MnuJTNfYaOwHz9Pl-TS8UzWYu0_dLpEL_l3XkouqCYQPPe7IdpNfX-c2mJoYGJeYxKOA8GjxpxGYyLaGFNguR9d-_rOuEnHxGAzPdnF-299kvW7nsqYFhRt7YAuFRMWjA7HFyApB9X1ZrRxhpLFoJrrwWmZqPNxwIRPDqru2QJ4YbRhtxahzFvU19t91R1YtY-pwGcQOBmI-udn92EqqtqdO8Zl-K00xxzzr7XQFxOcUvz_wieW4mfFISqWOrTJ4H71cI-_VjLc6PCLSXG8Cdx6SXvbX1WDenE52r4QTgHUGyi5Kc1vkwk-mqZ_6nqeOlkBXufvcYPuOKjnCc/p.png?fv_content=true&size_mode=5
+.. image:: https://image.ibb.co/jOxDp7/Fjelltopp_Text_Colour.png
   :width: 400
   :alt: Fjelltopp
