@@ -5,7 +5,6 @@ from repoze.who.interfaces import IAuthenticator
 from ckan.model import User
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
 
 
 class EmailAsUsernameAuthenticator(object):
@@ -18,8 +17,7 @@ class EmailAsUsernameAuthenticator(object):
             return None
 
         login = identity['login']
-        log.debug("Identity: {}".format(identity))
-
+        log.debug('Login: {}'.format(login))
         user = user_by_username_or_email(login)
         log.debug("User: {}".format(user))
 
@@ -37,6 +35,7 @@ class EmailAsUsernameAuthenticator(object):
 
 def user_by_username_or_email(login):
     user = User.by_name(login)
+    log.debug("User: {} ".format(user))
     if user:
         return user
     else:
