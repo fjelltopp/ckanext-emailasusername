@@ -51,11 +51,13 @@ by email fails - you must use your username to login/reset your password
 instead. It's recommended, if feasible, to work with your userbase to phase 
 out multiple accounts with the same email.
 
+**Important**  Installing this extension requires editing CKAN's who.ini file to point to the new authenticator.py file provided by this module.  Make sure you complete complete step 4 in the installation instructions below.
+
 ------------
 Requirements
 ------------
 
-This extension has been built and tested with CKAN 2.8.2. It requires ckantoolkit 0.0.4.
+This extension has been built and tested with CKAN 2.8.2. 
 
 ------------
 Installation
