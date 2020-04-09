@@ -55,9 +55,7 @@ out multiple accounts with the same email.
 Requirements
 ------------
 
-For example, you might want to mention here which versions of CKAN this
-extension works with.
-
+This extension has been built and tested with CKAN 2.8.2. It requires ckantoolkit 0.0.4.
 
 ------------
 Installation
