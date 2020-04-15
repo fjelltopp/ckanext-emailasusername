@@ -89,6 +89,7 @@ class ModuleTests(unittest.TestCase):
         self.assertTrue(len(errors[('email',)]) == 1)
 
     def test_email_exists(self):
+        # Test email exists validator for valid data
         key = ('email',)
         data = {('email',): 'test@ckan.org'}
         errors = {('email',): []}
@@ -96,7 +97,12 @@ class ModuleTests(unittest.TestCase):
         plugin.email_exists(key, data, errors, context)
         self.assertEquals(errors, {('email',): []})
 
-        test_user_dict = ckan.tests.factories.User(name='tester1', email='test@ckan.org')
+        # Test email exists validator for invalid data
+        # i.e. a pre-existing account already exists with the given email
+        test_user_dict = ckan.tests.factories.User(
+            name='tester1',
+            email='test@ckan.org'
+        )
         data = {('email',): test_user_dict['email']}
         plugin.email_exists(key, data, errors, context)
         self.assertTrue(len(errors[('email',)]) == 1)
