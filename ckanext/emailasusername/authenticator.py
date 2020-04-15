@@ -8,6 +8,15 @@ log = logging.getLogger(__name__)
 
 
 class EmailAsUsernameAuthenticator(object):
+    """
+    CKAN uses WSGI authentication middleware who.repoze to manage its
+    authentication.  Here we override the default authentication behaviour
+    to check the given credentials against email and username data.
+
+    When installing this extension you must configure CKAN to use this
+    authenticator. Check the installation instructions for how to update
+    who.ini file to do this.
+    """
 
     implements(IAuthenticator)
 
