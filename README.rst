@@ -32,8 +32,8 @@
 ckanext-emailasusername
 =============
 
-We have have found that many of our users quickly forget their CKAN username. 
-We have also observed several users assume they should use their email to 
+We have have found that many of our users quickly forget their CKAN username.
+We have also observed several users assume they should use their email to
 login.  This fails with a bad login error message, which causes some confusion.
 
 This CKAN extension allows users to login or reset their password with either
@@ -42,13 +42,13 @@ but just offers the option to use email instead.
 
 Out of the box, CKAN allows multiple accounts to be registered with the same
 email address.  This causes a problem for using email to identify the user.
-This extension therefore adds a validator to the registration form to stop 
+This extension therefore adds a validator to the registration form to stop
 new accounts being created if there already exists an account with the same
 email.
 
-If multiple accounts are registered to your email, then identifying the user 
+If multiple accounts are registered to your email, then identifying the user
 by email fails - you must use your username to login/reset your password
-instead. It's recommended, if feasible, to work with your userbase to phase 
+instead. It's recommended, if feasible, to work with your userbase to phase
 out multiple accounts with the same email.
 
 ------------
@@ -110,62 +110,6 @@ To run the tests and produce a coverage report, first make sure you have
 coverage installed in your virtualenv (``pip install coverage``) then run::
 
     nosetests --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.emailasusername --cover-inclusive --cover-erase --cover-tests
-
-
----------------------------------
-Registering ckanext-emailasusername on PyPI
----------------------------------
-
-ckanext-emailasusername should be availabe on PyPI as
-https://pypi.python.org/pypi/ckanext-emailasusername. If that link doesn't work, then
-you can register the project on PyPI for the first time by following these
-steps:
-
-1. Create a source distribution of the project::
-
-     python setup.py sdist
-
-2. Register the project::
-
-     python setup.py register
-
-3. Upload the source distribution to PyPI::
-
-     python setup.py sdist upload
-
-4. Tag the first release of the project on GitHub with the version number from
-   the ``setup.py`` file. For example if the version number in ``setup.py`` is
-   0.0.1 then do::
-
-       git tag 0.0.1
-       git push --tags
-
-
-----------------------------------------
-Releasing a New Version of ckanext-emailasusername
-----------------------------------------
-
-ckanext-emailasusername is availabe on PyPI as https://pypi.python.org/pypi/ckanext-emailasusername.
-To publish a new version to PyPI follow these steps:
-
-1. Update the version number in the ``setup.py`` file.
-   See `PEP 440 <http://legacy.python.org/dev/peps/pep-0440/#public-version-identifiers>`_
-   for how to choose version numbers.
-
-2. Create a source distribution of the new version::
-
-     python setup.py sdist
-
-3. Upload the source distribution to PyPI::
-
-     python setup.py sdist upload
-
-4. Tag the new release of the project on GitHub with the version number from
-   the ``setup.py`` file. For example if the version number in ``setup.py`` is
-   0.0.2 then do::
-
-       git tag 0.0.2
-       git push --tags
 
 -----------
 With thanks...
