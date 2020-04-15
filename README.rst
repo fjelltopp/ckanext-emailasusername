@@ -8,10 +8,6 @@
 .. image:: https://coveralls.io/repos/fjelltopp/ckanext-emailasusername/badge.svg
   :target: https://coveralls.io/r/fjelltopp/ckanext-emailasusername
 
-.. image:: https://pypip.in/download/ckanext-emailasusername/badge.svg
-    :target: https://pypi.python.org/pypi/ckanext-emailasusername/
-    :alt: Downloads
-
 .. image:: https://pypip.in/version/ckanext-emailasusername/badge.svg
     :target: https://pypi.python.org/pypi/ckanext-emailasusername/
     :alt: Latest Version
