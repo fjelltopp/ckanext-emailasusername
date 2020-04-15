@@ -7,6 +7,7 @@ from ckan.tests import helpers
 import ckanext.emailasusername.authenticator as authenticator
 import logging
 import unittest
+import mock
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
@@ -29,31 +30,8 @@ class ModuleTests(unittest.TestCase):
         log.warning("Tearing down function")
         helpers.reset_db()
 
-    def test_user_by_username_or_email(self):
-        username = 'tester1'
-        email = 'test1@ckan.org'
-        log.warning(ckan.tests.factories.User(name=username, email=email))
-
-        # Test getting user by username
-        user_obj = authenticator.user_by_username_or_email(username)
-        self.assertEquals(getattr(user_obj, 'name'), username)
-        self.assertEquals(getattr(user_obj, 'email'), email)
-
-        # Test getting user by email
-        user_obj = authenticator.user_by_username_or_email(email)
-        self.assertEquals(getattr(user_obj, 'name'), username)
-        self.assertEquals(getattr(user_obj, 'email'), email)
-
-        # Test trying to get a nonexistant user
-        user_obj = authenticator.user_by_username_or_email('wrongname')
-        self.assertEquals(user_obj, None)
-
-        # Test trying to get by email when multiple accounts have same email
-        ckan.tests.factories.User(name='tester2', email=email)
-        user_obj = authenticator.user_by_username_or_email(email)
-        self.assertEquals(user_obj, None)
-
-    def test_authenticate(self):
+    @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
+    def test_authenticate(self, flash_mock):
         auth = authenticator.EmailAsUsernameAuthenticator()
         response = auth.authenticate({}, {})
         self.assertEquals(response, None)
@@ -72,7 +50,26 @@ class ModuleTests(unittest.TestCase):
         response = auth.authenticate({}, identity)
         self.assertEquals(response, 'tester')
 
+        # Test that an incorrect email based login fails login
+        identity['login'] = 'test@ckan-wrong.org'
+        response = auth.authenticate({}, identity)
+        self.assertEquals(response, None)
+        flash_mock.assert_not_called()
+
+        # Test that login fails when two accounts registered with email exists
+        identity = {'login': 'tester2', 'password': 'RandomPassword123'}
+        ckan.tests.factories.User(
+            name=identity['login'],
+            email='test@ckan.org',
+            password=identity['password']
+        )
+        identity['login'] = 'test@ckan.org'
+        response = auth.authenticate({}, identity)
+        self.assertEquals(response, None)
+        flash_mock.assert_not_called()
+
         # Test that an incorrect password fails login
         identity['password'] += '!'
         response = auth.authenticate({}, identity)
         self.assertEquals(response, None)
+        flash_mock.assert_not_called()

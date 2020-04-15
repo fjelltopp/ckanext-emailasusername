@@ -15,7 +15,7 @@ emailasusername = Blueprint(
 )
 
 
-def user_by_username_or_email(login):
+def user_by_username_or_email(login, flash_errors=True):
     user = User.by_name(login)
     if user:
         return user
@@ -28,10 +28,17 @@ def user_by_username_or_email(login):
         if len(user_list) == 1:
             return user_list[0]
         elif len(user_list) > 1:
-            h.flash_error(_(u'Multiple users with email: {}').format(login))
+            log.debug("Multiple users with email address: {}".format(login))
+            if flash_errors:
+                h.flash_error(
+                    _(u'Multiple users with email {}, '
+                      'please specify your username instead').format(login)
+                )
             return None
         else:
-            h.flash_error(_(u'No such user: {}').format(login))
+            log.debug(u'No such user: {}'.format(login))
+            if flash_errors:
+                h.flash_error(_(u'No such user: {}').format(login))
             return None
 
 
