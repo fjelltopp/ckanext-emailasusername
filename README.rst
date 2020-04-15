@@ -28,9 +28,9 @@
     :target: https://pypi.python.org/pypi/ckanext-emailasusername/
     :alt: License
 
-=============
+=======================
 ckanext-emailasusername
-=============
+=======================
 
 We have have found that many of our users quickly forget their CKAN username.
 We have also observed several users assume they should use their email to
@@ -111,9 +111,9 @@ coverage installed in your virtualenv (``pip install coverage``) then run::
 
     nosetests --nologcapture --with-pylons=test.ini --with-coverage --cover-package=ckanext.emailasusername --cover-inclusive --cover-erase --cover-tests
 
------------
+--------------
 With thanks...
------------
+--------------
 
 This extension has been built by Fjelltopp with funding from UNAIDS as part of
 the AIDS Data Repository project: `https://adr.unaids.org <https://adr.unaids.org>`_
