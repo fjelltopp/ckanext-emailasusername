@@ -10,7 +10,6 @@ import unittest
 import mock
 
 log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
 
 
 class ModuleTests(unittest.TestCase):
@@ -34,7 +33,7 @@ class ModuleTests(unittest.TestCase):
     def test_user_by_username_or_email(self, flash_mock):
         username = 'tester1'
         email = 'test1@ckan.org'
-        log.warning(ckan.tests.factories.User(name=username, email=email))
+        ckan.tests.factories.User(name=username, email=email)
 
         # Test getting user by username
         user_obj = blueprint.user_by_username_or_email(username)
