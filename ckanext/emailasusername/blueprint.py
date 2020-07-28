@@ -52,7 +52,7 @@ def request_reset():
             return h.redirect_to(h.url_for('user.login'))
         except mailer.MailerException as e:
             h.flash_error(_(u'Could not send reset link: {}').format(e))
-    return h.redirect_to(h.url_for('user.reset'))
+    return h.redirect_to(h.url_for('user.request_reset'))
 
 
 emailasusername.add_url_rule(

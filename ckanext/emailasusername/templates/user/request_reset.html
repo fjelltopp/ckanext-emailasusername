@@ -1,7 +1,7 @@
 {% ckan_extends %}
 
 {% block form %}
-  <form action="/emailasusername/reset" method="post">
+  <form action="{{ h.url_for('emailasusername.request_reset') }}" method="post">
     <div class="form-group">
       <label for="field-username">{{ _('Username or Email') }}</label>
       <input id="field-username" class="control-medium form-control" name="user" value="" type="text" />
