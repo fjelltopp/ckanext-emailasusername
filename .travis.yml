@@ -13,3 +13,14 @@ install:
 script: sh bin/travis-run.sh
 after_success:
 - coveralls
+notifications:
+  slack:
+    if: branch IN (master, development)
+    on_success: change
+    on_failure: always
+    on_pull_requests: false
+    rooms:
+      - secure: bqpXjyCJa7b5HXBfwQdDTz3+IozGJTLDP3FzmTDepxwC0n869Y0g7JgodUVcovvlzblBdeuH7vPAH4I3FJK/9ySj5tvFL5sW/waz8aGJ0EkCCiUsp3NceFkndGUZlmdV1I1x1ArZI0EkXdV9C3Br1OTEBK+99VP5J7nQs9fLaLQEvZUcJYILygWLcfSo1Ar3jqNFeYGVtcgq4pUkNC8PgT8KJG3fyZ+H2qnLn3GbRXN1rdfOITDjAJQDK7CdUaxFOV+HrFvapEdOJzoH3UaQjGCfL8Rl/Ic/W9FfH/jUN9kwHihGavuqOdxh/WaaYg/RC0KcgPhEYslGYVQxTp6QVp+8gZg/+bDfiFyz2clGxmR5QunNJkL7YF2ikqYhfqfmE7xbJ3QjT8mjDQzhwdk+0UNN2tWnY/WQjgBVteD/YG+kZge+IuM1YtkjlKdqP1/zUoara3T/47/H7QLnf73UXsUZvkELZfwOsZ3p+HelZnerA2n1vRKQ0ZAHTKF+5PDwL7Mr6qIKCjMlBgxRgeCKD5TcmywX2DIkvsv+X2pWAub7bBh8IVdGuhTLUsWNf1CLKzY41sNIJIIZCWnH0/7xM3wponi6Grx+TauOYdn8v0GClqY03GvLQcSgXMyCZF5J7ldZeg1OXcycrr1WqyqA+yc2YgLrgAUwAaNS29f3QX4=
+  email:
+    on_success: never
+    on_failure: never
