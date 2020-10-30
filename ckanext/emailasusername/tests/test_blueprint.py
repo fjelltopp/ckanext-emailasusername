@@ -1,6 +1,3 @@
-import pydevd_pycharm
-pydevd_pycharm.settrace('host.docker.internal', port=9876, stdoutToServer=True, stderrToServer=True)
-
 """Tests for plugin.py."""
 import ckan.plugins
 import ckan.model
