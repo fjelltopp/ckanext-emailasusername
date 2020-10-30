@@ -5,32 +5,25 @@ pydevd_pycharm.settrace('host.docker.internal', port=9876, stdoutToServer=True, 
 import ckan.plugins
 import ckan.model
 import ckan.logic.schema
+from ckan.logic import ValidationError
 import ckan.tests.factories
 import six
 from ckan.lib.helpers import url_for
-from ckan.tests import helpers
 import ckanext.emailasusername.blueprint as blueprint
 from ckan.lib.mailer import MailerException
 import logging
 import pytest
 import mock
-#from ckan.tests.helpers import submit_and_follow
 import ckan.plugins as plugins
 
 log = logging.getLogger(__name__)
 
-@pytest.fixture
-def initdb():
-    ckan.model.Session.remove()
-    ckan.model.Session.configure(bind=ckan.model.meta.engine)
-
-#@pytest.mark.usefixtures(u'initdb')
 @pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 @pytest.mark.usefixtures(u'mail_server')
-class ModuleTests(object):
+class TestGetUser(object):
 
     @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
     def test_user_by_username_or_email(self, flash_mock):
@@ -38,26 +31,44 @@ class ModuleTests(object):
         email = 'test1@ckan.org'
         ckan.tests.factories.User(name=username, email=email)
 
+    @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
+    def test_user_by_username(self, flash_mock):
+        username = 'tester1'
+        email = 'test1@ckan.org'
+        ckan.tests.factories.User(name=username, email=email)
         # Test getting user by username
         user_obj = blueprint.user_by_username_or_email(username)
         assert getattr(user_obj, 'name') == username
-        assert getattr(email, 'name') == email
+        assert getattr(user_obj, 'email') == email
 
+    @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
+    def test_user_by_email(self, flash_mock):
+        username = 'tester1'
+        email = 'test1@ckan.org'
+        ckan.tests.factories.User(name=username, email=email)
         # Test getting user by email
         user_obj = blueprint.user_by_username_or_email(email)
         assert getattr(user_obj, 'name') == username
-        assert getattr(email, 'name') == email
+        assert getattr(user_obj, 'email') == email
 
+    @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
+    def test_user_by_wrong_username(self, flash_mock):
+        username = 'tester1'
+        email = 'test1@ckan.org'
+        ckan.tests.factories.User(name=username, email=email)
         # Test trying to get a nonexistant user
         user_obj = blueprint.user_by_username_or_email('wrongname')
         flash_mock.assert_called()
         assert user_obj is None
 
+    @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
+    def test_user_by_username_or_email(self, flash_mock):
+        username = 'tester1'
+        email = 'test1@ckan.org'
+        ckan.tests.factories.User(name=username, email=email)
         # Test trying to get by email when multiple accounts have same email
-        ckan.tests.factories.User(name='tester2', email=email)
-        user_obj = blueprint.user_by_username_or_email(email)
-        flash_mock.assert_called()
-        assert user_obj is None
+        with pytest.raises(ValidationError) as e_info:
+            ckan.tests.factories.User(name='tester2', email=email)
 
 
 def _assert_in_body(string, response):
@@ -77,7 +88,6 @@ def _assert_login_page_displayed(response):
 #     reset_form = response.forms[1]
 #     assert reset_form.action == url_for('emailasusername.request_reset')
 
-@pytest.mark.usefixtures(u'initdb')
 @pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
