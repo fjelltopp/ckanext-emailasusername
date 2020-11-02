@@ -3,9 +3,7 @@ import ckan.plugins
 import ckan.model as model
 import ckan.logic.schema
 import ckan.tests.factories
-from ckan.tests import helpers
 import ckanext.emailasusername.authenticator as authenticator
-import logging
 import pytest
 import mock
 
@@ -38,19 +36,16 @@ class TestAuthenticator(object):
         # Test that a correct login returns the username
         response = auth.authenticate({}, identity)
         assert response == 'tester'
-        #self.assertEquals(response, 'tester')
 
         # Test that a correct email based login returns the username
         identity['login'] = 'test@ckan.org'
         response = auth.authenticate({}, identity)
         assert response == 'tester'
-        #self.assertEquals(response, 'tester')
 
         # Test that an incorrect email based login fails login
         identity['login'] = 'test@ckan-wrong.org'
         response = auth.authenticate({}, identity)
         assert response is None
-        #self.assertEquals(response, None)
         flash_mock.assert_not_called()
 
         # Test that login fails when two accounts registered with email exists
@@ -63,12 +58,10 @@ class TestAuthenticator(object):
         identity['login'] = 'test@ckan.org'
         response = auth.authenticate({}, identity)
         assert response is None
-        #self.assertEquals(response, None)
         flash_mock.assert_not_called()
 
         # Test that an incorrect password fails login
         identity['password'] += '!'
         response = auth.authenticate({}, identity)
         assert response is None
-        #self.assertEquals(response, None)
         flash_mock.assert_not_called()
