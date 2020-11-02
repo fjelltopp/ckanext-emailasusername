@@ -11,7 +11,6 @@ from ckan.lib.mailer import MailerException
 import logging
 import pytest
 import mock
-import ckan.plugins as plugins
 
 log = logging.getLogger(__name__)
 
