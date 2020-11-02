@@ -3,7 +3,6 @@ import ckan.plugins
 import ckan.model
 import ckan.logic.schema
 import ckan.tests.factories
-from ckan.tests import helpers
 import ckanext.emailasusername.plugin as plugin
 import logging
 import pytest
@@ -11,7 +10,10 @@ import pytest
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
-
+@pytest.mark.usefixtures(u'clean_db')
+@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
+@pytest.mark.usefixtures(u'with_plugins')
+@pytest.mark.usefixtures(u'with_request_context')
 class TestEmails(object):
 
     def test_user_emails_match(self):
@@ -116,5 +118,5 @@ class TestEmails(object):
         # Check that all the other default schema fields remain untouched
         for key, value in default_schema.items():
             assert key in schema
-            assert value in schema[key]
+            assert (value in schema[key] or value == schema[key])
 
