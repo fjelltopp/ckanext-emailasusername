@@ -1,21 +1,14 @@
 """Tests for plugin.py."""
 import ckan.plugins
-import ckan.model as model
 import ckan.logic.schema
 import ckan.tests.factories
 import ckanext.emailasusername.authenticator as authenticator
 import pytest
 import mock
+from ckan.logic import ValidationError
 
-@pytest.fixture
-def initdb():
-    model.Session.remove()
-    model.Session.configure(bind=model.meta.engine)
-    model.init_tables()
-
-@pytest.mark.usefixtures(u'initdb')
 @pytest.mark.usefixtures(u'clean_db')
-@pytest.mark.ckan_config(u'ckan.plugins', u'ytp_request')
+@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 @pytest.mark.usefixtures(u'mail_server')
@@ -25,7 +18,7 @@ class TestAuthenticator(object):
     def test_authenticate(self, flash_mock):
         auth = authenticator.EmailAsUsernameAuthenticator()
         response = auth.authenticate({}, {})
-        self.assertEquals(response, None)
+        assert response is None
         identity = {'login': 'tester', 'password': 'RandomPassword123'}
         ckan.tests.factories.User(
             name=identity['login'],
@@ -50,15 +43,21 @@ class TestAuthenticator(object):
 
         # Test that login fails when two accounts registered with email exists
         identity = {'login': 'tester2', 'password': 'RandomPassword123'}
-        ckan.tests.factories.User(
-            name=identity['login'],
-            email='test@ckan.org',
-            password=identity['password']
-        )
-        identity['login'] = 'test@ckan.org'
-        response = auth.authenticate({}, identity)
-        assert response is None
-        flash_mock.assert_not_called()
+        email = 'test@ckan.org'
+        try:
+            ckan.tests.factories.User(
+                name=identity['login'],
+                email=email,
+                password=identity['password']
+            )
+            identity['login'] = email
+            response = auth.authenticate({}, identity)
+            assert response is None
+            flash_mock.assert_not_called()
+        except ValidationError as e:
+            # CKAN 2.9 does not allow users to have identical emails
+            assert e.error_summary['Email'] == u'The email address \'{}\' belongs to a registered user.'.format(email)
+
 
         # Test that an incorrect password fails login
         identity['password'] += '!'
