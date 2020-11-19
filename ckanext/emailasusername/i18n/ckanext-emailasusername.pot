@@ -9,28 +9,28 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-emailasusername 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-01-22 23:37+0000\n"
+"POT-Creation-Date: 2020-11-19 09:23+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.3.4\n"
-
-#: ckanext/emailasusername/blueprint.py:31
-msgid "Multiple users with email: {}"
-msgstr ""
+"Generated-By: Babel 2.7.0\n"
 
 #: ckanext/emailasusername/blueprint.py:34
+msgid "Multiple users with email {}, please specify your username instead"
+msgstr ""
+
+#: ckanext/emailasusername/blueprint.py:41
 msgid "No such user: {}"
 msgstr ""
 
-#: ckanext/emailasusername/blueprint.py:44
+#: ckanext/emailasusername/blueprint.py:51
 msgid "Please check your inbox for a reset code."
 msgstr ""
 
-#: ckanext/emailasusername/blueprint.py:47
+#: ckanext/emailasusername/blueprint.py:54
 msgid "Could not send reset link: {}"
 msgstr ""
 
