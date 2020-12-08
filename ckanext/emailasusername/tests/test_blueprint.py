@@ -14,6 +14,7 @@ import mock
 
 log = logging.getLogger(__name__)
 
+
 @pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
@@ -22,7 +23,7 @@ log = logging.getLogger(__name__)
 class TestGetUser(object):
 
     @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
-    def test_user_by_username_or_email(self, flash_mock):
+    def test_user_by_username_or_email_create(self, flash_mock):
         username = 'tester1'
         email = 'test1@ckan.org'
         ckan.tests.factories.User(name=username, email=email)
@@ -58,12 +59,12 @@ class TestGetUser(object):
         assert user_obj is None
 
     @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
-    def test_user_by_username_or_email(self, flash_mock):
+    def test_user_by_username_or_email_duplicate_email(self, flash_mock):
         username = 'tester1'
         email = 'test1@ckan.org'
         ckan.tests.factories.User(name=username, email=email)
         # Test trying to get by email when multiple accounts have same email
-        with pytest.raises(ValidationError) as e_info:
+        with pytest.raises(ValidationError):
             ckan.tests.factories.User(name='tester2', email=email)
 
 
@@ -139,7 +140,6 @@ class TestRequestResetFunctional(object):
         # then:
         assert not mailer_mock.called
         _assert_in_body("A reset link has been emailed to you", test_response)
-        #_assert_request_reset_page_displayed(test_response)
 
     @mock.patch('ckanext.emailasusername.blueprint.mailer.send_reset_link')
     def test_request_reset_display_error_on_smtp_problem(self, send_reset_link, app):
@@ -159,4 +159,3 @@ class TestRequestResetFunctional(object):
 
         # then:
         _assert_in_body("Error sending the email. Try again later or contact an administrator for help", test_response)
-        #_assert_request_reset_page_displayed(test_response)

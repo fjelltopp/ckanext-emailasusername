@@ -7,6 +7,7 @@ import pytest
 import mock
 from ckan.logic import ValidationError
 
+
 @pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
@@ -57,7 +58,6 @@ class TestAuthenticator(object):
         except ValidationError as e:
             # CKAN 2.9 does not allow users to have identical emails
             assert e.error_summary['Email'] == u'The email address \'{}\' belongs to a registered user.'.format(email)
-
 
         # Test that an incorrect password fails login
         identity['password'] += '!'
