@@ -23,7 +23,7 @@ log = logging.getLogger(__name__)
 class TestGetUser(object):
 
     @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
-    def test_user_by_username_or_email_create(self, flash_mock):
+    def test_user_by_username_or_email_create_user(self, flash_mock):
         username = 'tester1'
         email = 'test1@ckan.org'
         ckan.tests.factories.User(name=username, email=email)
