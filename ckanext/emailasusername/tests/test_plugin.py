@@ -10,6 +10,7 @@ import pytest
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
+
 @pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
@@ -119,4 +120,3 @@ class TestEmails(object):
         for key, value in default_schema.items():
             assert key in schema
             assert (value in schema[key] or value == schema[key])
-
