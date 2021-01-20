@@ -1,13 +1,13 @@
 # encoding: utf-8
+import logging
+from six import text_type
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic.schema as schema
-import logging
-from blueprint import emailasusername
 from ckan.lib.plugins import DefaultTranslation
 from ckan.model import User
 from ckan.common import _
-from six import text_type
+from ckanext.emailasusername.blueprint import emailasusername
 
 log = logging.getLogger(__name__)
 
