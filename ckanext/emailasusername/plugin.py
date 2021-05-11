@@ -8,6 +8,9 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan.model import User
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
+from ckan.model import meta
+from sqlalchemy.sql.expression import or_
+
 
 log = logging.getLogger(__name__)
 
@@ -21,6 +24,8 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IConfigurer
     def update_config(self, config_):
+        if config_.get("emailasusername.search_by_email"):
+            User.search = search
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'emailasusername')
@@ -88,3 +93,25 @@ def user_emails_match(key, data, errors, context):
         )
     else:
         data[('email',)] = email1
+
+
+@classmethod
+def search(cls, querystr, sqlalchemy_query=None, user_name=None):
+    '''Search name, fullname, email. '''
+    if sqlalchemy_query is None:
+        query = meta.Session.query(cls)
+    else:
+        query = sqlalchemy_query
+    qstr = '%' + querystr + '%'
+    filters = [
+        cls.name.ilike(qstr),
+        cls.fullname.ilike(qstr),
+    ]
+    # sysadmins can search on user emails, everyone else has to know the exact email
+    import ckan.authz as authz
+    if user_name and authz.is_sysadmin(user_name):
+        filters.append(cls.email.ilike(qstr))
+    else:
+        filters.append(cls.email == qstr[1:-1])
+    query = query.filter(or_(*filters))
+    return query
