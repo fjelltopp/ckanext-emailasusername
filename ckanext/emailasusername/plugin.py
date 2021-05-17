@@ -24,8 +24,8 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     # IConfigurer
     def update_config(self, config_):
-        if config_.get("emailasusername.search_by_email"):
-            User.search = search
+        if config_.get("emailasusername.search_by_username_and_email"):
+            User.search = search_by_username_and_email
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'emailasusername')
@@ -96,7 +96,7 @@ def user_emails_match(key, data, errors, context):
 
 
 @classmethod
-def search(cls, querystr, sqlalchemy_query=None, user_name=None):
+def search_by_username_and_email(cls, querystr, sqlalchemy_query=None, user_name=None):
     '''Search name, fullname, email. '''
     if sqlalchemy_query is None:
         query = meta.Session.query(cls)
@@ -112,6 +112,6 @@ def search(cls, querystr, sqlalchemy_query=None, user_name=None):
     if user_name and authz.is_sysadmin(user_name):
         filters.append(cls.email.ilike(qstr))
     else:
-        filters.append(cls.email == qstr[1:-1])
+        filters.append(cls.email == querystr)
     query = query.filter(or_(*filters))
     return query
