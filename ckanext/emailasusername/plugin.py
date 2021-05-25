@@ -8,8 +8,7 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan.model import User
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
-from ckan.model import meta
-from sqlalchemy.sql.expression import or_
+from ckanext.emailasusername.logic import user_autocomplete
 
 
 log = logging.getLogger(__name__)
@@ -21,11 +20,10 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     plugins.implements(plugins.interfaces.IValidators)
     plugins.implements(plugins.interfaces.IBlueprint)
     plugins.implements(plugins.interfaces.ITranslation)
+    plugins.implements(plugins.interfaces.IActions)
 
     # IConfigurer
     def update_config(self, config_):
-        if config_.get("emailasusername.search_by_username_and_email"):
-            User.search = search_by_username_and_email
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'emailasusername')
@@ -37,6 +35,12 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
             'user_both_emails_entered': user_both_emails_entered,
             'user_emails_match': user_emails_match
         }
+
+    def get_actions(self):
+        actions = {}
+        if toolkit.config.get("emailasusername.search_by_username_and_email"):
+            actions['user_autocomplete'] = user_autocomplete
+        return actions
 
     def get_blueprint(self):
         return emailasusername
@@ -93,25 +97,3 @@ def user_emails_match(key, data, errors, context):
         )
     else:
         data[('email',)] = email1
-
-
-@classmethod
-def search_by_username_and_email(cls, querystr, sqlalchemy_query=None, user_name=None):
-    '''Search name, fullname, email. '''
-    if sqlalchemy_query is None:
-        query = meta.Session.query(cls)
-    else:
-        query = sqlalchemy_query
-    qstr = '%' + querystr + '%'
-    filters = [
-        cls.name.ilike(qstr),
-        cls.fullname.ilike(qstr),
-    ]
-    # sysadmins can search on user emails, everyone else has to know the exact email
-    import ckan.authz as authz
-    if user_name and authz.is_sysadmin(user_name):
-        filters.append(cls.email.ilike(qstr))
-    else:
-        filters.append(cls.email == querystr)
-    query = query.filter(or_(*filters))
-    return query
