@@ -104,7 +104,7 @@ The plugin also offers the following configuration settings that can be set in y
 
     emailasusername.search_by_username_and_email = True
 
-Adding this parameter will allow users to search for other users by entering an email address, wherever the ``user_autocomplete`` action is called, or the     ``ckan.model.User.search()`` function is used. For security reasons the entire email address is required to match the user account (otherwise the feature could be used to infer the email addresses of other users).  This may be useful, for example, when org admins are adding a new member to their org and do not know the username of the user they wish to add.
+Adding this parameter will allow users to search for other users by entering an email address, wherever the ``user_autocomplete`` action is called. For security reasons the entire email address is required to match the user account (otherwise the feature could be used to infer the email addresses of other users).  This may be useful, for example, when org admins are adding a new member to their org and do not know the username of the user they wish to add.
 
 -----------------
 Running the Tests
