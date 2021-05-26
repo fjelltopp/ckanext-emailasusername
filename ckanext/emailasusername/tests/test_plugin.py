@@ -3,6 +3,7 @@ import ckan.plugins
 import ckan.model
 import ckan.logic.schema
 import ckan.tests.factories
+import ckan.tests.helpers
 import ckanext.emailasusername.plugin as plugin
 import logging
 import pytest
