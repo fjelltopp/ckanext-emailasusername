@@ -8,6 +8,8 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan.model import User
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
+from ckanext.emailasusername.logic import user_autocomplete
+
 
 log = logging.getLogger(__name__)
 
@@ -18,6 +20,7 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     plugins.implements(plugins.interfaces.IValidators)
     plugins.implements(plugins.interfaces.IBlueprint)
     plugins.implements(plugins.interfaces.ITranslation)
+    plugins.implements(plugins.interfaces.IActions)
 
     # IConfigurer
     def update_config(self, config_):
@@ -32,6 +35,12 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
             'user_both_emails_entered': user_both_emails_entered,
             'user_emails_match': user_emails_match
         }
+
+    def get_actions(self):
+        actions = {}
+        if toolkit.config.get("emailasusername.search_by_username_and_email"):
+            actions['user_autocomplete'] = user_autocomplete
+        return actions
 
     def get_blueprint(self):
         return emailasusername
