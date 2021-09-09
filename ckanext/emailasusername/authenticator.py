@@ -1,12 +1,13 @@
 # encoding: utf-8
 import logging
-from zope.interface import implements
+from zope.interface import implementer
 from repoze.who.interfaces import IAuthenticator
 from ckanext.emailasusername.blueprint import user_by_username_or_email
 
 log = logging.getLogger(__name__)
 
 
+@implementer(IAuthenticator)
 class EmailAsUsernameAuthenticator(object):
     """
     CKAN uses WSGI authentication middleware who.repoze to manage its
@@ -17,8 +18,6 @@ class EmailAsUsernameAuthenticator(object):
     authenticator. Check the installation instructions for how to update
     who.ini file to do this.
     """
-
-    implements(IAuthenticator)
 
     def authenticate(self, environ, identity):
         log.debug("Authenticate Called")
