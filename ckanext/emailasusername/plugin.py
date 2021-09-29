@@ -54,6 +54,7 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
             'get_auto_generate_username_from_fullname': get_auto_generate_username_from_fullname,
         }
 
+
 @schema.validator_args
 def emailasusername_new_user_schema(
         unicode_safe, user_both_passwords_entered,
