@@ -3,28 +3,33 @@
 <form id="user-register-form" action="" method="post">
   {{ form.errors(error_summary) }}
 
-  <div id="username-input-field">
-    {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}, is_required=True) }}
-    {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-placeholder': '<username>', 'class': 'form-control'} %}
-    {{ form.prepend('name', id='field-username', label=_('Username'), placeholder=_('username'), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
-  </div>
-  <style>
-    /* change URL: field to Username: */
-    #username-input-field .slug-preview strong {
-        display: none;
-    }
-    #username-input-field .slug-preview:before {
-        content: 'Username:';
-        font-weight: bold;
-    }
-    /* make username input conform to form style */
-    #username-input-field .input-group{
-      width: 100%;
-    }
-    #username-input-field .form-control{
-      border-radius: 3px;
-    }
-  </style>
+  {% if h.get_auto_generate_username_from_fullname() %}
+    <div id="username-input-field">
+      {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}, is_required=True) }}
+      {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-placeholder': '<username>', 'class': 'form-control'} %}
+      {{ form.prepend('name', id='field-username', label=_('Username'), placeholder=_('username'), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
+    </div>
+    <style>
+      /* change URL: field to Username: */
+      #username-input-field .slug-preview strong {
+          display: none;
+      }
+      #username-input-field .slug-preview:before {
+          content: 'Username:';
+          font-weight: bold;
+      }
+      /* make username input conform to form style */
+      #username-input-field .input-group{
+        width: 100%;
+      }
+      #username-input-field .form-control{
+        border-radius: 3px;
+      }
+    </style>
+  {% else %}
+    {{ form.input("name", id="field-username", label=_("Username"), placeholder=_("username"), value=data.name, error=errors.name, classes=["control-medium"], is_required=True) }}
+    {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"]) }}
+  {% endif %}
 
   {{ form.input("email1", id="field-email", label=_("Email"), type="email", placeholder=_("joe@example.com"), value=data.email1, error=errors.email, classes=["control-medium"], is_required=True) }}
   {{ form.input("email2", id="field-confirm-email", label=_("Confirm Email"), type="email", placeholder=_("joe@example.com"), value=data.email2, error=errors.email, classes=["control-medium"], is_required=True) }}
