@@ -61,7 +61,9 @@ def emailasusername_new_user_schema(
         user_password_validator, user_passwords_match, email_exists,
         not_empty, email_validator):
     emailasusername_schema = schema.default_user_schema()
-
+    emailasusername_schema['fullname'] = [
+        not_empty, unicode_safe
+    ]
     emailasusername_schema['password1'] = [
         text_type, user_both_passwords_entered,
         user_password_validator, user_passwords_match
