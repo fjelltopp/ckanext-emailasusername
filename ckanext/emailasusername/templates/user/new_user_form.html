@@ -1,10 +1,10 @@
 {% import "macros/form.html" as form %}
-{% include "user/snippets/custom_username_css.html" %}
 
 <form id="user-register-form" action="" method="post">
   {{ form.errors(error_summary) }}
 
   {% if h.get_auto_generate_username_from_fullname() %}
+    {% include "user/snippets/custom_username_css.html" %}
     <div id="username-input-field">
       {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}, is_required=True) }}
       {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-placeholder': '<username>', 'class': 'form-control'} %}
