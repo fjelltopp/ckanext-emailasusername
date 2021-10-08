@@ -98,6 +98,7 @@ class TestEmails(object):
     def test_emailasusername_new_user_schema(self):
 
         schema = ckan.logic.schema.user_new_form_schema()
+        assert 'fullname' in schema
         assert 'email' in schema
         assert 'email1' in schema
         assert 'email2' in schema
@@ -115,6 +116,7 @@ class TestEmails(object):
         assert 'not_empty' not in email_validators
 
         default_schema = ckan.logic.schema.default_user_schema()
+        del default_schema['fullname']
         del default_schema['email']
 
         # Check that all the other default schema fields remain untouched

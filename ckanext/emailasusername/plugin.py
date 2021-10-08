@@ -9,7 +9,9 @@ from ckan.model import User
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
 from ckanext.emailasusername.logic import user_autocomplete
-
+from ckanext.emailasusername.helpers import (
+    get_auto_generate_username_from_fullname,
+)
 
 log = logging.getLogger(__name__)
 
@@ -17,6 +19,7 @@ log = logging.getLogger(__name__)
 class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     plugins.implements(plugins.interfaces.IConfigurer)
+    plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.interfaces.IValidators)
     plugins.implements(plugins.interfaces.IBlueprint)
     plugins.implements(plugins.interfaces.ITranslation)
@@ -45,6 +48,12 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     def get_blueprint(self):
         return emailasusername
 
+    # ITemplateHelpers
+    def get_helpers(self):
+        return {
+            'get_auto_generate_username_from_fullname': get_auto_generate_username_from_fullname,
+        }
+
 
 @schema.validator_args
 def emailasusername_new_user_schema(
@@ -52,7 +61,9 @@ def emailasusername_new_user_schema(
         user_password_validator, user_passwords_match, email_exists,
         not_empty, email_validator):
     emailasusername_schema = schema.default_user_schema()
-
+    emailasusername_schema['fullname'] = [
+        not_empty, unicode_safe
+    ]
     emailasusername_schema['password1'] = [
         text_type, user_both_passwords_entered,
         user_password_validator, user_passwords_match
