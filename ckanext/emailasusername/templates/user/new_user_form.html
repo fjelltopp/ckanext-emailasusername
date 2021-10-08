@@ -17,7 +17,7 @@
 
   {{ form.input("email1", id="field-email", label=_("Email"), type="email", placeholder=_("joe@example.com"), value=data.email1, error=errors.email, classes=["control-medium"], is_required=True) }}
   {{ form.input("email2", id="field-confirm-email", label=_("Confirm Email"), type="email", placeholder=_("joe@example.com"), value=data.email2, error=errors.email, classes=["control-medium"], is_required=True) }}
-  {{ form.input("password1", id="field-password", label=_("Password"), type="password", placeholder="Password", value=data.password1, error=errors.password1, classes=["control-medium"], is_required=True) }}
+  {{ form.input("password1", id="field-password", label=_("Password"), type="password", placeholder=_("Password"), value=data.password1, error=errors.password1, classes=["control-medium"], is_required=True) }}
   {{ form.input("password2", id="field-confirm-password", label=_("Confirm Password"), type="password", placeholder=_("Confirm Password"), value=data.password2, error=errors.password1, classes=["control-medium"], is_required=True) }}
 
   {% if g.recaptcha_publickey %}
