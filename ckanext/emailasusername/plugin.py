@@ -11,6 +11,7 @@ from ckanext.emailasusername.blueprint import emailasusername
 from ckanext.emailasusername.logic import user_autocomplete
 from ckanext.emailasusername.helpers import (
     get_auto_generate_username_from_fullname,
+    get_skip_user_email_input_confirmation
 )
 
 log = logging.getLogger(__name__)
@@ -52,6 +53,7 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     def get_helpers(self):
         return {
             'get_auto_generate_username_from_fullname': get_auto_generate_username_from_fullname,
+            'get_skip_user_email_input_confirmation': get_skip_user_email_input_confirmation
         }
 
 
@@ -76,7 +78,8 @@ def emailasusername_new_user_schema(
         user_emails_match, user_both_emails_entered, not_empty,
         unicode_safe, email_validator, email_exists
     ]
-    emailasusername_schema['email2'] = [not_empty]
+    if not get_skip_user_email_input_confirmation():
+        emailasusername_schema['email2'] = [not_empty]
     return emailasusername_schema
 
 
@@ -90,21 +93,23 @@ def email_exists(key, data, errors, context):
 
 
 def user_both_emails_entered(key, data, errors, context):
-    email1 = data.get(('email1',), None)
-    email2 = data.get(('email2',), None)
-    if email1 is None or email1 == '' or \
-       email2 is None or email2 == '':
-        errors[('email',)].append(
-            _('Please enter your email in both email fields')
-        )
+    if not get_skip_user_email_input_confirmation():
+        email1 = data.get(('email1',), None)
+        email2 = data.get(('email2',), None)
+        if email1 is None or email1 == '' or \
+            email2 is None or email2 == '':
+                errors[('email',)].append(
+                    _('Please enter your email in both email fields')
+                )
 
 
 def user_emails_match(key, data, errors, context):
-    email1 = data.get(('email1',), None)
-    email2 = data.get(('email2',), None)
-    if not email1 == email2:
-        errors[('email',)].append(
-            _('You did not retype your email correctly')
-        )
-    else:
-        data[('email',)] = email1
+    if not get_skip_user_email_input_confirmation():
+        email1 = data.get(('email1',), None)
+        email2 = data.get(('email2',), None)
+        if not email1 == email2:
+            errors[('email',)].append(
+                _('You did not retype your email correctly')
+            )
+        else:
+            data[('email',)] = email1
