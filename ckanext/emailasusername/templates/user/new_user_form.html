@@ -3,7 +3,7 @@
 <form id="user-register-form" action="" method="post">
   {{ form.errors(error_summary) }}
 
-  {% if h.get_auto_generate_username_from_fullname() %}
+  {% if h.config_auto_generate_username_from_fullname() %}
     {% include "user/snippets/custom_username_css.html" %}
     <div id="username-input-field">
       {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}, is_required=True) }}
@@ -16,7 +16,7 @@
   {% endif %}
 
   {{ form.input("email1", id="field-email", label=_("Email"), type="email", placeholder=_("joe@example.com"), value=data.email1, error=errors.email, classes=["control-medium"], is_required=True) }}
-  {% if not h.get_skip_user_email_input_confirmation() %}
+  {% if h.config_require_user_email_input_confirmation() %}
     {{ form.input("email2", id="field-confirm-email", label=_("Confirm Email"), type="email", placeholder=_("joe@example.com"), value=data.email2, error=errors.email, classes=["control-medium"], is_required=True) }}
   {% endif %}
   {{ form.input("password1", id="field-password", label=_("Password"), type="password", placeholder="••••••••", value=data.password1, error=errors.password1, classes=["control-medium"], is_required=True) }}
