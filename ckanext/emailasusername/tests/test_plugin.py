@@ -4,12 +4,17 @@ import ckan.model
 import ckan.logic.schema
 import ckan.tests.factories
 import ckan.tests.helpers
+from ckan.lib.helpers import url_for
 import ckanext.emailasusername.plugin as plugin
 import logging
 import pytest
 
 log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
+
+
+def get_validator_names(validator_list):
+    return list(map(lambda f: f.__name__, validator_list))
 
 
 @pytest.mark.usefixtures(u'clean_db')
@@ -96,7 +101,6 @@ class TestEmails(object):
         assert len(errors[('email',)]) == 1
 
     def test_emailasusername_new_user_schema(self):
-
         schema = ckan.logic.schema.user_new_form_schema()
         assert 'fullname' in schema
         assert 'email' in schema
@@ -104,9 +108,6 @@ class TestEmails(object):
         assert 'email2' in schema
         assert 'password1' in schema
         assert 'password2' in schema
-
-        def get_validator_names(validator_list):
-            return list(map(lambda f: f.__name__, validator_list))
 
         email1_validators = get_validator_names(schema['email1'])
         assert 'user_emails_match' in email1_validators
@@ -123,3 +124,26 @@ class TestEmails(object):
         for key, value in default_schema.items():
             assert key in schema
             assert (value in schema[key] or value == schema[key])
+
+    def test_user_registration_frontend_form(self, app):
+        response = app.get(url_for('user.register'))
+        assert 'email2' in response.body
+
+
+@pytest.mark.usefixtures(u'clean_db')
+@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
+@pytest.mark.usefixtures(u'with_plugins')
+@pytest.mark.usefixtures(u'with_request_context')
+@pytest.mark.ckan_config(u'ckanext.emailasusername.require_user_email_input_confirmation', False)
+class TestEmailsWithoutRequiringUserEmailInputConfirmation(object):
+
+    def test_emailasusername_new_user_schema(self):
+        schema = ckan.logic.schema.user_new_form_schema()
+        assert 'email2' not in schema
+        email_validators = get_validator_names(schema['email1'])
+        assert 'user_emails_match' not in email_validators
+        assert 'user_both_emails_entered' not in email_validators
+
+    def test_user_registration_frontend_form(self, app):
+        response = app.get(url_for('user.register'))
+        assert 'email2' not in response.body
