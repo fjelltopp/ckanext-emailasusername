@@ -12,6 +12,10 @@ log = logging.getLogger(__name__)
 log.setLevel(logging.DEBUG)
 
 
+def get_validator_names(validator_list):
+    return list(map(lambda f: f.__name__, validator_list))
+
+
 @pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
@@ -105,9 +109,6 @@ class TestEmails(object):
         assert 'password1' in schema
         assert 'password2' in schema
 
-        def get_validator_names(validator_list):
-            return list(map(lambda f: f.__name__, validator_list))
-
         email1_validators = get_validator_names(schema['email1'])
         assert 'user_emails_match' in email1_validators
         assert 'user_both_emails_entered' in email1_validators
@@ -135,10 +136,6 @@ class TestEmailsWithoutRequiringUserEmailInputConfirmation(object):
     def test_emailasusername_new_user_schema(self):
 
         schema = ckan.logic.schema.user_new_form_schema()
-        assert 'email2' not in schema.keys()
-
-        def get_validator_names(validator_list):
-            return list(map(lambda f: f.__name__, validator_list))
 
         email_validators = get_validator_names(schema['email1'])
         assert 'user_emails_match' not in email_validators
