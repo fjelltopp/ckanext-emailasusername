@@ -5,7 +5,6 @@ import ckan.logic.schema
 import ckan.tests.factories
 import ckan.tests.helpers
 from ckan.lib.helpers import url_for
-from ckan.plugins import toolkit
 import ckanext.emailasusername.plugin as plugin
 import logging
 import pytest
