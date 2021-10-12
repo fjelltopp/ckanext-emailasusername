@@ -14,28 +14,28 @@ jobs:
         run: |
           flake8 . --count --max-line-length=127 --show-source --statistics
   test:
-      needs: lint
-      strategy:
-        matrix:
-          ckan-version: [2.9, 2.9-py2]
-        fail-fast: false
+    needs: lint
+    strategy:
+      matrix:
+        ckan-version: [2.9, 2.9-py2]
+      fail-fast: false
 
-      name: CKAN ${{ matrix.ckan-version }}
-      runs-on: ubuntu-18.04
-      container:
-        image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
-      services:
-        solr:
-          image: ckan/ckan-solr-dev:${{ matrix.ckan-version }}
-        postgres:
-          image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
-          env:
-            POSTGRES_USER: postgres
-            POSTGRES_PASSWORD: postgres
-            POSTGRES_DB: postgres
-          options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-        redis:
-            image: redis:3
+    name: CKAN ${{ matrix.ckan-version }}
+    runs-on: ubuntu-18.04
+    container:
+      image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
+    services:
+      solr:
+        image: ckan/ckan-solr-dev:${{ matrix.ckan-version }}
+      postgres:
+        image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: postgres
+        options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+      redis:
+          image: redis:3
     env:
       CKAN_SQLALCHEMY_URL: postgresql://ckan_default:pass@postgres/ckan_test
       CKAN_DATASTORE_WRITE_URL: postgresql://datastore_write:pass@postgres/datastore_test
