@@ -130,12 +130,13 @@ class TestEmails(object):
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
-@pytest.mark.ckan_config(u'ckanext.emailasusername.config_require_user_email_input_confirmation', False)
+@pytest.mark.ckan_config(u'ckanext.emailasusername.require_user_email_input_confirmation', False)
 class TestEmailsWithoutRequiringUserEmailInputConfirmation(object):
 
     def test_emailasusername_new_user_schema(self):
 
         schema = ckan.logic.schema.user_new_form_schema()
+        assert 'email2' not in schema
 
         email_validators = get_validator_names(schema['email1'])
         assert 'user_emails_match' not in email_validators
