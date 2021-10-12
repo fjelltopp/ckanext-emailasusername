@@ -135,7 +135,7 @@ class TestEmailsWithoutRequiringUserEmailInputConfirmation(object):
     def test_emailasusername_new_user_schema(self):
 
         schema = ckan.logic.schema.user_new_form_schema()
-        assert 'email2' not in schema
+        assert 'email2' in schema == False
 
         def get_validator_names(validator_list):
             return list(map(lambda f: f.__name__, validator_list))
