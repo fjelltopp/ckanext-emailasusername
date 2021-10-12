@@ -125,7 +125,7 @@ class TestEmails(object):
             assert key in schema
             assert (value in schema[key] or value == schema[key])
 
-    def test_user_registration_frontend_form(app):
+    def test_user_registration_frontend_form(self, app):
         response = app.get(url_for('user.register'))
         assert 'email2' in response.body
 
@@ -144,6 +144,6 @@ class TestEmailsWithoutRequiringUserEmailInputConfirmation(object):
         assert 'user_emails_match' not in email_validators
         assert 'user_both_emails_entered' not in email_validators
 
-    def test_user_registration_frontend_form(app):
+    def test_user_registration_frontend_form(self, app):
         response = app.get(url_for('user.register'))
         assert 'email2' not in response.body
