@@ -98,10 +98,10 @@ def user_both_emails_entered(key, data, errors, context):
     email1 = data.get(('email1',), None)
     email2 = data.get(('email2',), None)
     if email1 is None or email1 == '' or \
-        email2 is None or email2 == '':
-            errors[('email',)].append(
-                _('Please enter your email in both email fields')
-            )
+       email2 is None or email2 == '':
+        errors[('email',)].append(
+            _('Please enter your email in both email fields')
+        )
 
 
 def user_emails_match(key, data, errors, context):
