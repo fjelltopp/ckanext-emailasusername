@@ -140,6 +140,6 @@ class TestEmailsWithoutRequiringUserEmailInputConfirmation(object):
         def get_validator_names(validator_list):
             return list(map(lambda f: f.__name__, validator_list))
 
-        email1_validators = get_validator_names(schema['email1'])
-        assert 'user_emails_match' not in email1_validators
-        assert 'user_both_emails_entered' not in email1_validators
+        email_validators = get_validator_names(schema['email1'])
+        assert 'user_emails_match' not in email_validators
+        assert 'user_both_emails_entered' not in email_validators
