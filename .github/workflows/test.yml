@@ -13,18 +13,22 @@ jobs:
       - name: Check syntax
         run: |
           flake8 . --count --max-line-length=127 --show-source --statistics
-
   test:
     needs: lint
-    name: CKAN 2.9-py2
-    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        ckan-version: [2.9, 2.9-py2]
+      fail-fast: false
+
+    name: CKAN ${{ matrix.ckan-version }}
+    runs-on: ubuntu-18.04
     container:
-      image: openknowledge/ckan-dev:2.9-py2
+      image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
     services:
       solr:
-        image: ckan/ckan-solr-dev:2.9-py2
+        image: ckan/ckan-solr-dev:${{ matrix.ckan-version }}
       postgres:
-        image: ckan/ckan-postgres-dev:2.9-py2
+        image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres

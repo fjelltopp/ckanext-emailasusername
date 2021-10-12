@@ -10,7 +10,8 @@ from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
 from ckanext.emailasusername.logic import user_autocomplete
 from ckanext.emailasusername.helpers import (
-    get_auto_generate_username_from_fullname,
+    config_auto_generate_username_from_fullname,
+    config_require_user_email_input_confirmation
 )
 
 log = logging.getLogger(__name__)
@@ -51,7 +52,8 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     # ITemplateHelpers
     def get_helpers(self):
         return {
-            'get_auto_generate_username_from_fullname': get_auto_generate_username_from_fullname,
+            'config_auto_generate_username_from_fullname': config_auto_generate_username_from_fullname,
+            'config_require_user_email_input_confirmation': config_require_user_email_input_confirmation
         }
 
 
@@ -73,10 +75,13 @@ def emailasusername_new_user_schema(
     ]
     emailasusername_schema['email'] = [unicode_safe, email_validator]
     emailasusername_schema['email1'] = [
-        user_emails_match, user_both_emails_entered, not_empty,
-        unicode_safe, email_validator, email_exists
+        not_empty, unicode_safe, email_validator, email_exists
     ]
-    emailasusername_schema['email2'] = [not_empty]
+    if config_require_user_email_input_confirmation():
+        emailasusername_schema['email1'] += [
+            user_emails_match, user_both_emails_entered
+        ]
+        emailasusername_schema['email2'] = [not_empty]
     return emailasusername_schema
 
 
