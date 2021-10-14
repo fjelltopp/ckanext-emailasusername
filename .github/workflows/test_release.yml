@@ -1,0 +1,21 @@
+name: Publish to Test PyPI
+on:
+  push:
+    tags:
+      - '*.*.*'
+jobs:
+  test_pypi_release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions/setup-python@v2
+      - name: Install twine
+        run: pip install twine wheel
+      - name: Test project
+        run: python setup.py check
+      - name: Prepare project
+        run: python setup.py sdist bdist_wheel
+      - name: Create Twine credentials
+        run: echo -e "${{ secrets.TESTPYPI_CONFIG }}" > $HOME/.pypirc
+      - name: Publish package
+        run: twine upload --verbose --repository testpypi dist/*
