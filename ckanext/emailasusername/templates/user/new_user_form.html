@@ -2,12 +2,25 @@
 
 <form id="user-register-form" action="" method="post">
   {{ form.errors(error_summary) }}
-  {{ form.input("name", id="field-username", label=_("Username"), placeholder=_("username"), value=data.name, error=errors.name, classes=["control-medium"], is_required=True) }}
-  {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"]) }}
+
+  {% if h.config_auto_generate_username_from_fullname() %}
+    {% include "user/snippets/custom_username_css.html" %}
+    <div id="username-input-field">
+      {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"], attrs={'data-module': 'slug-preview-target', 'class': 'form-control'}, is_required=True) }}
+      {% set attrs = {'data-module': 'slug-preview-slug', 'data-module-placeholder': '<username>', 'class': 'form-control'} %}
+      {{ form.prepend('name', id='field-username', label=_('Username'), placeholder=_('username'), value=data.name, error=errors.name, attrs=attrs, is_required=true) }}
+    </div>    
+  {% else %}
+    {{ form.input("name", id="field-username", label=_("Username"), placeholder=_("username"), value=data.name, error=errors.name, classes=["control-medium"], is_required=True) }}
+    {{ form.input("fullname", id="field-fullname", label=_("Full Name"), placeholder=_("Joe Bloggs"), value=data.fullname, error=errors.fullname, classes=["control-medium"], is_required=True) }}
+  {% endif %}
+
   {{ form.input("email1", id="field-email", label=_("Email"), type="email", placeholder=_("joe@example.com"), value=data.email1, error=errors.email, classes=["control-medium"], is_required=True) }}
-  {{ form.input("email2", id="field-confirm-email", label=_("Confirm Email"), type="email", placeholder=_("joe@example.com"), value=data.email2, error=errors.email, classes=["control-medium"], is_required=True) }}
-  {{ form.input("password1", id="field-password", label=_("Password"), type="password", placeholder="••••••••", value=data.password1, error=errors.password1, classes=["control-medium"], is_required=True) }}
-  {{ form.input("password2", id="field-confirm-password", label=_("Confirm Password"), type="password", placeholder="••••••••", value=data.password2, error=errors.password1, classes=["control-medium"], is_required=True) }}
+  {% if h.config_require_user_email_input_confirmation() %}
+    {{ form.input("email2", id="field-confirm-email", label=_("Confirm Email"), type="email", placeholder=_("joe@example.com"), value=data.email2, error=errors.email, classes=["control-medium"], is_required=True) }}
+  {% endif %}
+  {{ form.input("password1", id="field-password", label=_("Password"), type="password", placeholder=_("Password"), value=data.password1, error=errors.password1, classes=["control-medium"], is_required=True) }}
+  {{ form.input("password2", id="field-confirm-password", label=_("Confirm Password"), type="password", placeholder=_("Confirm Password"), value=data.password2, error=errors.password1, classes=["control-medium"], is_required=True) }}
 
   {% if g.recaptcha_publickey %}
     {% snippet "user/snippets/recaptcha.html", public_key=g.recaptcha_publickey %}

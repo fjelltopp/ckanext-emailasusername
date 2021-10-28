@@ -1,0 +1,29 @@
+<!-- 
+    This CSS overwrites some hard-coded user-facing language in the slug-preview.js ckan module.
+    The JS module otherwise works perfectly for our purposes, so this CSS is a better solution
+    than creating an entire fork of the JS module. The CSS is included in this jinja2 template
+    instead of a separate stylesheet so that the language can be properly translated.
+-->
+
+<style>
+
+    /* change URL: field to Username: */
+    #username-input-field .slug-preview strong {
+        display: none;
+    }
+
+    #username-input-field .slug-preview:before {
+        content: '{{ _("Username") }}:';
+        font-weight: bold;
+    }
+
+    /* make username input conform to form style */
+    #username-input-field .input-group {
+        width: 100%;
+    }
+
+    #username-input-field .form-control {
+        border-radius: 3px;
+    }
+
+</style>

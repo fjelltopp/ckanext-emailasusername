@@ -9,7 +9,10 @@ from ckan.model import User
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
 from ckanext.emailasusername.logic import user_autocomplete
-
+from ckanext.emailasusername.helpers import (
+    config_auto_generate_username_from_fullname,
+    config_require_user_email_input_confirmation
+)
 
 log = logging.getLogger(__name__)
 
@@ -17,6 +20,7 @@ log = logging.getLogger(__name__)
 class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     plugins.implements(plugins.interfaces.IConfigurer)
+    plugins.implements(plugins.ITemplateHelpers)
     plugins.implements(plugins.interfaces.IValidators)
     plugins.implements(plugins.interfaces.IBlueprint)
     plugins.implements(plugins.interfaces.ITranslation)
@@ -45,6 +49,13 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     def get_blueprint(self):
         return emailasusername
 
+    # ITemplateHelpers
+    def get_helpers(self):
+        return {
+            'config_auto_generate_username_from_fullname': config_auto_generate_username_from_fullname,
+            'config_require_user_email_input_confirmation': config_require_user_email_input_confirmation
+        }
+
 
 @schema.validator_args
 def emailasusername_new_user_schema(
@@ -52,7 +63,9 @@ def emailasusername_new_user_schema(
         user_password_validator, user_passwords_match, email_exists,
         not_empty, email_validator):
     emailasusername_schema = schema.default_user_schema()
-
+    emailasusername_schema['fullname'] = [
+        not_empty, unicode_safe
+    ]
     emailasusername_schema['password1'] = [
         text_type, user_both_passwords_entered,
         user_password_validator, user_passwords_match
@@ -62,10 +75,13 @@ def emailasusername_new_user_schema(
     ]
     emailasusername_schema['email'] = [unicode_safe, email_validator]
     emailasusername_schema['email1'] = [
-        user_emails_match, user_both_emails_entered, not_empty,
-        unicode_safe, email_validator, email_exists
+        not_empty, unicode_safe, email_validator, email_exists
     ]
-    emailasusername_schema['email2'] = [not_empty]
+    if config_require_user_email_input_confirmation():
+        emailasusername_schema['email1'] += [
+            user_emails_match, user_both_emails_entered
+        ]
+        emailasusername_schema['email2'] = [not_empty]
     return emailasusername_schema
 
 

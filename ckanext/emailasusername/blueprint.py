@@ -23,7 +23,7 @@ def user_by_username_or_email(login, flash_errors=True):
         def not_deleted(user):
             return getattr(user, 'state') != 'deleted'
         user_list = User.by_email(login)
-        user_list = filter(not_deleted, user_list)
+        user_list = list(filter(not_deleted, user_list))
 
         if len(user_list) == 1:
             return user_list[0]
