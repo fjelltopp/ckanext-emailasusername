@@ -9,89 +9,89 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-emailasusername 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2020-11-19 09:23+0000\n"
+"POT-Creation-Date: 2022-01-11 08:51+0000\n"
 "PO-Revision-Date: 2020-12-14 11:47+0300\n"
+"Last-Translator: \n"
 "Language: fr\n"
 "Language-Team: fr <LL@li.org>\n"
-"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"Plural-Forms: nplurals=2; plural=(n > 1)\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.7.0\n"
-"Last-Translator: \n"
-"X-Generator: Poedit 2.4.2\n"
 
 #: ckanext/emailasusername/blueprint.py:34
 msgid "Multiple users with email {}, please specify your username instead"
-msgstr ""
-"Plusieurs utilisateurs avec e-mail {}, s’il vous plaît spécifier votre "
-"nom d’utilisateur à la place"
+msgstr "Plusieurs utilisateurs possèdent l’adresse e-mail {}, veuillez indiquer votre nom d'utilisateur à la place"
 
 #: ckanext/emailasusername/blueprint.py:41
 msgid "No such user: {}"
-msgstr "Aucun utilisateur de ce genre: {}"
+msgstr "Aucun utilisateur ne correspond : {}"
 
 #: ckanext/emailasusername/blueprint.py:51
 msgid "Please check your inbox for a reset code."
-msgstr ""
-"S’il vous plaît vérifier votre boîte de réception pour un code de "
-"réinitialisation."
+msgstr "Veuillez vérifier votre boîte de réception pour obtenir un code de réinitialisation."
 
 #: ckanext/emailasusername/blueprint.py:54
 msgid "Could not send reset link: {}"
-msgstr "Ne pouvait pas envoyer de lien de réinitialisation: {}"
+msgstr "Impossible d’envoyer de lien de réinitialisation : {}"
 
-#: ckanext/emailasusername/plugin.py:68
+#: ckanext/emailasusername/plugin.py:93
 msgid "An account is already registered to that email."
 msgstr "Un compte est déjà enregistré à cet e-mail."
 
-#: ckanext/emailasusername/plugin.py:78
+#: ckanext/emailasusername/plugin.py:103
 msgid "Please enter your email in both email fields"
-msgstr "S’il vous plaît entrer votre e-mail dans les deux champs"
+msgstr "Veuillez saisir votre e-mail dans les deux champs"
 
-#: ckanext/emailasusername/plugin.py:87
+#: ckanext/emailasusername/plugin.py:112
 msgid "You did not retype your email correctly"
 msgstr "Vous n'avez pas retapé votre e-mail correctement"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:5
+#: ckanext/emailasusername/templates/user/new_user_form.html:9
+#: ckanext/emailasusername/templates/user/new_user_form.html:15
+msgid "Full Name"
+msgstr "Nom complet"
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:9
+#: ckanext/emailasusername/templates/user/new_user_form.html:15
+msgid "Joe Bloggs"
+msgstr "Joe Bloggs"
+
+#: ckanext/emailasusername/templates/user/new_user_form.html:11
+#: ckanext/emailasusername/templates/user/new_user_form.html:14
+#: ckanext/emailasusername/templates/user/snippets/custom_username_css.html:16
 msgid "Username"
 msgstr "Nom d'utilisateur"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:5
+#: ckanext/emailasusername/templates/user/new_user_form.html:11
+#: ckanext/emailasusername/templates/user/new_user_form.html:14
 msgid "username"
-msgstr "Nom d'utilisateur"
+msgstr "nom d'utilisateur"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:6
-msgid "Full Name"
-msgstr "Nom"
-
-#: ckanext/emailasusername/templates/user/new_user_form.html:6
-msgid "Joe Bloggs"
-msgstr ""
-
-#: ckanext/emailasusername/templates/user/new_user_form.html:7
+#: ckanext/emailasusername/templates/user/new_user_form.html:18
 msgid "Email"
-msgstr "Email"
+msgstr "E-mail"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:7
-#: ckanext/emailasusername/templates/user/new_user_form.html:8
+#: ckanext/emailasusername/templates/user/new_user_form.html:18
+#: ckanext/emailasusername/templates/user/new_user_form.html:20
 msgid "joe@example.com"
-msgstr ""
+msgstr "joe@example.com"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:8
+#: ckanext/emailasusername/templates/user/new_user_form.html:20
 msgid "Confirm Email"
-msgstr "Verifie votre address email"
+msgstr "Confirmer l’adresse e-mail"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:9
+#: ckanext/emailasusername/templates/user/new_user_form.html:22
 #: ckanext/emailasusername/templates/user/snippets/login_form.html:22
 msgid "Password"
 msgstr "Mot de passe"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:10
+#: ckanext/emailasusername/templates/user/new_user_form.html:23
 msgid "Confirm Password"
-msgstr "Confirmez le mot de passe"
+msgstr "Confirmer le mot de passe"
 
-#: ckanext/emailasusername/templates/user/new_user_form.html:20
+#: ckanext/emailasusername/templates/user/new_user_form.html:33
 msgid "Create Account"
 msgstr "Créer un compte"
 
@@ -113,9 +113,7 @@ msgid ""
 "Enter your username or email into the box and we will send you an email "
 "with a link to enter a new password."
 msgstr ""
-"Entrez votre nom d'utilisateur ou votre e-mail dans la case et nous "
-"vous enverrons un e-mail avec un lien pour entrer un nouveau mot de "
-"passe."
+"Entrez votre nom d'utilisateur ou votre e-mail dans la case et nous vous enverrons un e-mail avec un lien pour entrer un nouveau mot de passe."
 
 #: ckanext/emailasusername/templates/user/snippets/login_form.html:24
 msgid "Remember me"
