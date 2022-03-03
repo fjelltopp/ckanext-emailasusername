@@ -2,7 +2,11 @@ from ckan.model import User
 import ckan.logic as logic
 from ckan.model import meta
 from sqlalchemy.sql.expression import or_
+from sqlalchemy import func
+import logging
 
+
+log = logging.getLogger(__name__)
 _check_access = logic.check_access
 
 
@@ -21,8 +25,12 @@ def search_by_username_and_email(querystr, sqlalchemy_query=None, user_name=None
     import ckan.authz as authz
     if user_name and authz.is_sysadmin(user_name):
         filters.append(User.email.ilike(qstr))
+        log.debug("Inside sysadmin search")
+        log.debug(User.email.ilike(qstr))
     else:
-        filters.append(User.email == querystr)
+        filters.append(func.lower(User.email) == func.lower(querystr))
+        log.debug("Inside user search")
+        log.debug(func.lower(User.email) == func.lower(querystr))
     query = query.filter(or_(*filters))
     return query
 
@@ -50,8 +58,7 @@ def user_autocomplete(context, data_dict):
     q = data_dict['q']
     limit = data_dict.get('limit', 20)
     ignore_self = data_dict.get('ignore_self', False)
-
-    query = search_by_username_and_email(q)
+    query = search_by_username_and_email(q, user_name=user)
     query = query.filter(model.User.state != model.State.DELETED)
 
     if ignore_self:
