@@ -42,18 +42,19 @@ class TestSearchUsersByEmail(object):
     def test_search_by_full_email(self, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'])
-        log.debug("Inside tests")
-        log.debug(response)
         assert len(response) == 1
 
     @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
-    def test_search_by_full_email_sysadmin_context(self, sysadmin_context, identity):
+    def test_search_by_partial_email_sysadmin(self, sysadmin_context, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='test@ckan')
-        log.debug("Inside tests")
-        log.debug(identity['email'].upper())
-        log.debug(response)
         assert len(response) == 1
+
+    @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
+    def test_search_by_nonexisting_email_sysadmin(self, sysadmin_context, identity):
+        ckan.tests.factories.User(**identity)
+        response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='tast@ckan.org')
+        assert not response
 
     @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
     def test_search_by_partial_email(self, identity):
