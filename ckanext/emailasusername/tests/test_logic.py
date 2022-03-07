@@ -40,9 +40,21 @@ class TestSearchUsersByEmail(object):
         assert len(response) == 1
 
     @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
+    def test_search_by_full_email_case_insensitive(self, identity):
+        ckan.tests.factories.User(**identity)
+        response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'].upper())
+        assert len(response) == 1
+
+    @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
     def test_search_by_partial_email_sysadmin(self, sysadmin_context, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='test@ckan')
+        assert len(response) == 1
+
+    @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
+    def test_search_by_partial_email_sysadmin_case_insensitive(self, sysadmin_context, identity):
+        ckan.tests.factories.User(**identity)
+        response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='test@ckan'.upper())
         assert len(response) == 1
 
     @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'True')
