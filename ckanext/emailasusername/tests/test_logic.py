@@ -4,12 +4,7 @@ import ckan.model
 import ckan.logic.schema
 import ckan.tests.factories
 import ckan.tests.helpers
-import logging
 import pytest
-
-
-log = logging.getLogger(__name__)
-log.setLevel(logging.DEBUG)
 
 
 @pytest.fixture
