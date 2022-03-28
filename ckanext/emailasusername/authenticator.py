@@ -20,7 +20,6 @@ class EmailAsUsernameAuthenticator(object):
     """
 
     def authenticate(self, environ, identity):
-        log.debug("Authenticate Called")
         if not ('login' in identity and 'password' in identity):
             return None
 
