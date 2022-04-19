@@ -3,32 +3,44 @@ on: [pull_request]
 jobs:
   lint:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        python-version: [ 2.7, 3.9 ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
         with:
-          python-version: '2.7'
+          python-version: ${{ matrix.python-version }}
       - name: Install requirements
         run: pip install flake8 pycodestyle
       - name: Check syntax
         run: |
           flake8 . --count --max-line-length=127 --show-source --statistics
   test:
-    needs: lint
+    name: CKAN
+    runs-on: ubuntu-latest
     strategy:
-      matrix:
-        ckan-version: [2.9, 2.9-py2]
       fail-fast: false
+      matrix:
+        include:
+          - ckan-container-version: "2.9-py2"
+            ckan-postgres-version: "2.9"
+            ckan-solr-version: "2.9-solr8"
+          - ckan-container-version: "2.9"
+            ckan-postgres-version: "2.9"
+            ckan-solr-version: "2.9-solr8"
+          - ckan-container-version: "2.10"
+            ckan-postgres-version: "2.10"
+            ckan-solr-version: "2.10"
 
-    name: CKAN ${{ matrix.ckan-version }}
-    runs-on: ubuntu-18.04
     container:
-      image: openknowledge/ckan-dev:${{ matrix.ckan-version }}
+      image: openknowledge/ckan-dev:${{ matrix.ckan-container-version }}
     services:
       solr:
-        image: ckan/ckan-solr-dev:${{ matrix.ckan-version }}
+        image: ckan/ckan-solr:${{ matrix.ckan-solr-version }}
       postgres:
-        image: ckan/ckan-postgres-dev:${{ matrix.ckan-version }}
+        image: ckan/ckan-postgres-dev:${{ matrix.ckan-postgres-version }}
         env:
           POSTGRES_USER: postgres
           POSTGRES_PASSWORD: postgres
