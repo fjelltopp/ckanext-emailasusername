@@ -5,6 +5,9 @@ import ckan.logic.schema
 import ckan.tests.factories
 import ckan.tests.helpers
 import pytest
+import mock
+import ckan.plugins.toolkit as toolkit
+from ckan.tests.helpers import call_action
 
 
 @pytest.fixture
@@ -68,3 +71,54 @@ class TestSearchUsersByEmail(object):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'][:-1])
         assert not response
+
+
+@pytest.mark.usefixtures("clean_db")
+@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
+@pytest.mark.usefixtures(u'with_plugins')
+@pytest.mark.ckan_config(u'emailasusername.autogenerate_usernames', u'true')
+class TestUsernameCreate():
+
+    def test_without_name_or_email(self):
+        expected_error_message = "Must specify either a name or an email"
+        with pytest.raises(toolkit.ValidationError, match=expected_error_message):
+            call_action(
+                'user_create',
+                {},
+                id='test-id',
+                password='test-password'
+            )
+
+    @mock.patch('ckan.logic.action.create.random.SystemRandom.random', return_value=0.2222)
+    def test_simple_email(self, random_patch):
+        result = call_action(
+            'user_create',
+            {},
+            id='test-id',
+            email='testuser@avenirhealth.com',
+            password='test-password'
+        )
+        assert result['name'] == 'testuser-2222'
+
+    @mock.patch('ckan.logic.action.create.random.SystemRandom.random', return_value=0.2222)
+    def test_username_munging(self, random_patch):
+        result = call_action(
+            'user_create',
+            {},
+            id='test-id',
+            email='test.user@unaids.org',
+            password='test-password'
+        )
+        assert result['name'] == 'test-user-2222'
+
+    def test_invalid_email(self):
+        with pytest.raises(toolkit.ValidationError) as error_raised:
+            call_action(
+                'user_create',
+                {},
+                id='test-id',
+                email='testuser.org',
+                password='test-password'
+            )
+        # Check that a name error hasn't also been thrown for an email error
+        assert 'name' not in error_raised.value.error_dict.keys()
