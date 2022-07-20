@@ -3,7 +3,10 @@ import ckan.logic as logic
 from ckan.model import meta
 from sqlalchemy.sql.expression import or_
 from sqlalchemy import func
-
+import ckan.plugins.toolkit as toolkit
+import ckan.plugins as p
+from ckanext.emailasusername.interfaces import IEmailAsUsername
+from ckan.logic.action.create import _get_random_username_from_email
 
 _check_access = logic.check_access
 
@@ -69,3 +72,27 @@ def user_autocomplete(context, data_dict):
         user_list.append(result_dict)
 
     return user_list
+
+
+@toolkit.chained_action
+def user_create(next_action, context, data_dict):
+    """
+    Autogenerates a username using the email field (if username is not provided).
+    """
+
+    if data_dict.get('name'):
+        return next_action(context, data_dict)
+
+    if not data_dict.get('email'):
+        raise toolkit.ValidationError(toolkit._("Must specify either a name or an email"))
+
+    data_dict['name'] = _generate_username(data_dict['email'])
+
+    return next_action(context, data_dict)
+
+
+def _generate_username(email):
+    username = _get_random_username_from_email(email)
+    for plugin in p.PluginImplementations(IEmailAsUsername):
+        username = plugin.generate_username(email, username)
+    return username
