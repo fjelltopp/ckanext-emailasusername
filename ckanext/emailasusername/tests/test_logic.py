@@ -76,7 +76,7 @@ class TestSearchUsersByEmail(object):
 @pytest.mark.usefixtures("clean_db")
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
-@pytest.mark.ckan_config(u'emailasusername.autogenerate_usernames', u'true')
+@pytest.mark.ckan_config(u'ckanext.emailasusername.auto_generate_username_from_email', u'true')
 class TestUsernameCreate():
 
     def test_without_name_or_email(self):

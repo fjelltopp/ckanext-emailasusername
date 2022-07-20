@@ -47,7 +47,7 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
         actions = {}
         if toolkit.config.get("emailasusername.search_by_username_and_email"):
             actions['user_autocomplete'] = user_autocomplete
-        if toolkit.config.get("emailasusername.autogenerate_usernames"):
+        if toolkit.config.get("ckanext.emailasusername.auto_generate_username_from_email"):
             actions['user_create'] = user_create
         return actions
 
