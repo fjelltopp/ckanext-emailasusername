@@ -73,10 +73,13 @@ class TestSearchUsersByEmail(object):
         assert not response
 
 
-@pytest.mark.usefixtures("clean_db")
+@pytest.mark.usefixtures(u'clean_db')
 @pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
 @pytest.mark.usefixtures(u'with_plugins')
-@pytest.mark.ckan_config(u'ckanext.emailasusername.auto_generate_username_from_email', u'true')
+@pytest.mark.ckan_config(
+    u'ckanext.emailasusername.auto_generate_username_from_email',
+    u'true'
+)
 class TestUsernameCreate():
 
     def test_without_name_or_email(self):
@@ -89,7 +92,10 @@ class TestUsernameCreate():
                 password='test-password'
             )
 
-    @mock.patch('ckan.logic.action.create.random.SystemRandom.random', return_value=0.2222)
+    @mock.patch(
+        u'ckan.logic.action.create.random.SystemRandom.random',
+        return_value=0.2222
+    )
     def test_simple_email(self, random_patch):
         result = call_action(
             'user_create',
@@ -100,7 +106,10 @@ class TestUsernameCreate():
         )
         assert result['name'] == 'testuser-2222'
 
-    @mock.patch('ckan.logic.action.create.random.SystemRandom.random', return_value=0.2222)
+    @mock.patch(
+        u'ckan.logic.action.create.random.SystemRandom.random',
+        return_value=0.2222
+    )
     def test_username_munging(self, random_patch):
         result = call_action(
             'user_create',
