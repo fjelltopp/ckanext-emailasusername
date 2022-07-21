@@ -16,8 +16,6 @@ log = logging.getLogger(__name__)
 
 
 @pytest.mark.usefixtures(u'clean_db')
-@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
-@pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 @pytest.mark.usefixtures(u'mail_server')
 class TestGetUser(object):
@@ -86,8 +84,6 @@ def _assert_login_page_displayed(response):
 #     assert reset_form.action == url_for('emailasusername.request_reset')
 
 @pytest.mark.usefixtures(u'clean_db')
-@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
-@pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 @pytest.mark.usefixtures(u'mail_server')
 class TestRequestResetFunctional(object):

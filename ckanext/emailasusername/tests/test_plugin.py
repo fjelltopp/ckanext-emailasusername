@@ -21,8 +21,6 @@ def get_validator_names(validator_list):
 
 
 @pytest.mark.usefixtures(u'clean_db')
-@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
-@pytest.mark.usefixtures(u'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 class TestEmails(object):
 
