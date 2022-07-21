@@ -8,6 +8,7 @@ import pytest
 import mock
 import ckan.plugins.toolkit as toolkit
 from ckan.tests.helpers import call_action
+import ckanext.emailasusername.logic as logic
 
 
 @pytest.fixture
@@ -93,7 +94,7 @@ class TestUsernameCreate():
             )
 
     @mock.patch(
-        u'ckan.logic.action.create.random.SystemRandom.random',
+        u'ckanext.emailasusername.logic.random.SystemRandom.random',
         return_value=0.2222
     )
     def test_simple_email(self, random_patch):
@@ -106,20 +107,6 @@ class TestUsernameCreate():
         )
         assert result['name'] == 'testuser-2222'
 
-    @mock.patch(
-        u'ckan.logic.action.create.random.SystemRandom.random',
-        return_value=0.2222
-    )
-    def test_username_munging(self, random_patch):
-        result = call_action(
-            'user_create',
-            {},
-            id='test-id',
-            email='test.user@unaids.org',
-            password='test-password'
-        )
-        assert result['name'] == 'test-user-2222'
-
     def test_invalid_email(self):
         with pytest.raises(toolkit.ValidationError) as error_raised:
             call_action(
@@ -131,3 +118,18 @@ class TestUsernameCreate():
             )
         # Check that a name error hasn't also been thrown for an email error
         assert 'name' not in error_raised.value.error_dict.keys()
+
+    @pytest.mark.parametrize('email, expected_username', [
+        ('test.user@unaids.org', 'test-user-2222'),
+        ('test123@who.int', 'test123-2222'),
+        ('faulty_email_address', 'faulty_email_address-2222'),
+        ('faulty-address@fault@address.org', 'faulty-address-2222')
+    ])
+    @mock.patch(
+        u'ckanext.emailasusername.logic.random.SystemRandom.random',
+        return_value=0.2222
+    )
+    def test_username_generation(self, random_patch, email, expected_username):
+        result = logic._get_random_username_from_email(email, ckan.model)
+        assert result == expected_username
+
