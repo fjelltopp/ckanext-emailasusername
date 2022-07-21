@@ -8,7 +8,10 @@ from ckan.lib.plugins import DefaultTranslation
 from ckan.model import User
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
-from ckanext.emailasusername.logic import user_autocomplete
+from ckanext.emailasusername.logic import (
+    user_autocomplete,
+    user_create
+)
 from ckanext.emailasusername.helpers import (
     config_auto_generate_username_from_fullname,
     config_require_user_email_input_confirmation
@@ -44,6 +47,8 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
         actions = {}
         if toolkit.config.get("emailasusername.search_by_username_and_email"):
             actions['user_autocomplete'] = user_autocomplete
+        if toolkit.config.get("ckanext.emailasusername.auto_generate_username_from_email"):
+            actions['user_create'] = user_create
         return actions
 
     def get_blueprint(self):
