@@ -132,4 +132,3 @@ class TestUsernameCreate():
     def test_username_generation(self, random_patch, email, expected_username):
         result = logic._get_random_username_from_email(email, ckan.model)
         assert result == expected_username
-
