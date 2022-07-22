@@ -12,10 +12,7 @@ from ckanext.emailasusername.logic import (
     user_autocomplete,
     user_create
 )
-from ckanext.emailasusername.helpers import (
-    config_auto_generate_username_from_fullname,
-    config_require_user_email_input_confirmation
-)
+import ckanext.emailasusername.helpers as helpers
 
 log = logging.getLogger(__name__)
 
@@ -45,9 +42,9 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
     def get_actions(self):
         actions = {}
-        if toolkit.config.get("emailasusername.search_by_username_and_email"):
+        if helpers.config_search_by_username_and_email():
             actions['user_autocomplete'] = user_autocomplete
-        if toolkit.config.get("ckanext.emailasusername.auto_generate_username_from_email"):
+        if helpers.config_auto_generate_username_from_email():
             actions['user_create'] = user_create
         return actions
 
@@ -57,8 +54,10 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     # ITemplateHelpers
     def get_helpers(self):
         return {
-            'config_auto_generate_username_from_fullname': config_auto_generate_username_from_fullname,
-            'config_require_user_email_input_confirmation': config_require_user_email_input_confirmation
+            'config_auto_generate_username_from_fullname':
+                helpers.config_auto_generate_username_from_fullname,
+            'config_require_user_email_input_confirmation':
+                helpers.config_require_user_email_input_confirmation
         }
 
 
@@ -82,7 +81,7 @@ def emailasusername_new_user_schema(
     emailasusername_schema['email1'] = [
         not_empty, unicode_safe, email_validator, email_exists
     ]
-    if config_require_user_email_input_confirmation():
+    if helpers.config_require_user_email_input_confirmation():
         emailasusername_schema['email1'] += [
             user_emails_match, user_both_emails_entered
         ]
