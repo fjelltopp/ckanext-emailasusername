@@ -25,7 +25,7 @@ def identity():
     return identity
 
 
-@pytest.mark.usefixtures(u'clean_db')
+@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 class TestSearchUsersByEmail(object):
 
@@ -72,7 +72,7 @@ class TestSearchUsersByEmail(object):
         assert not response
 
 
-@pytest.mark.usefixtures(u'clean_db')
+@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
 @pytest.mark.ckan_config(
     u'ckanext.emailasusername.auto_generate_username_from_email',
     u'true'

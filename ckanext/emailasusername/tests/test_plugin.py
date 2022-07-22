@@ -20,7 +20,7 @@ def get_validator_names(validator_list):
     return list(map(lambda f: f.__name__, validator_list))
 
 
-@pytest.mark.usefixtures(u'clean_db')
+@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 class TestEmails(object):
 

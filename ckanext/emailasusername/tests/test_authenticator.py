@@ -8,7 +8,7 @@ import mock
 from ckan.logic import ValidationError
 
 
-@pytest.mark.usefixtures(u'clean_db')
+@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
 @pytest.mark.usefixtures(u'with_request_context')
 @pytest.mark.usefixtures(u'mail_server')
 class TestAuthenticator(object):
