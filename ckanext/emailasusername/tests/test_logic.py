@@ -26,7 +26,6 @@ def identity():
 
 
 @pytest.mark.usefixtures(u'clean_db', 'with_plugins')
-@pytest.mark.usefixtures(u'with_request_context')
 class TestSearchUsersByEmail(object):
 
     @pytest.mark.ckan_config(u'emailasusername.search_by_username_and_email', u'')
@@ -72,7 +71,7 @@ class TestSearchUsersByEmail(object):
         assert not response
 
 
-@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
+@pytest.mark.usefixtures('clean_db', 'with_plugins')
 @pytest.mark.ckan_config(
     u'ckanext.emailasusername.auto_generate_username_from_email',
     u'true'
@@ -88,6 +87,20 @@ class TestUsernameCreate():
                 id='test-id',
                 password='test-password'
             )
+
+    @pytest.mark.parametrize('email, expected_username', [
+        ('test.user@unaids.org', 'test-user-2222'),
+        ('test123@who.int', 'test123-2222'),
+        ('faulty_email_address', 'faulty_email_address-2222'),
+        ('faulty-address@fault@address.org', 'faulty-address-2222')
+    ])
+    @mock.patch(
+        u'ckanext.emailasusername.logic.random.SystemRandom.random',
+        return_value=0.2222
+    )
+    def test_username_generation(self, random_patch, email, expected_username):
+        result = logic._get_random_username_from_email(email, ckan.model)
+        assert result == expected_username
 
     @mock.patch(
         u'ckanext.emailasusername.logic.random.SystemRandom.random',
@@ -114,17 +127,3 @@ class TestUsernameCreate():
             )
         # Check that a name error hasn't also been thrown for an email error
         assert 'name' not in error_raised.value.error_dict.keys()
-
-    @pytest.mark.parametrize('email, expected_username', [
-        ('test.user@unaids.org', 'test-user-2222'),
-        ('test123@who.int', 'test123-2222'),
-        ('faulty_email_address', 'faulty_email_address-2222'),
-        ('faulty-address@fault@address.org', 'faulty-address-2222')
-    ])
-    @mock.patch(
-        u'ckanext.emailasusername.logic.random.SystemRandom.random',
-        return_value=0.2222
-    )
-    def test_username_generation(self, random_patch, email, expected_username):
-        result = logic._get_random_username_from_email(email, ckan.model)
-        assert result == expected_username
