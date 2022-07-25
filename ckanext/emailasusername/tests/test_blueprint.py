@@ -4,7 +4,6 @@ import ckan.model
 import ckan.logic.schema
 from ckan.logic import ValidationError
 import ckan.tests.factories
-import six
 from ckan.lib.helpers import url_for
 import ckanext.emailasusername.blueprint as blueprint
 from ckan.lib.mailer import MailerException
@@ -15,8 +14,8 @@ import mock
 log = logging.getLogger(__name__)
 
 
-@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
-@pytest.mark.usefixtures(u'mail_server')
+@pytest.mark.usefixtures('clean_db', 'with_plugins')
+@pytest.mark.usefixtures('mail_server')
 class TestGetUser(object):
 
     @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
@@ -66,10 +65,7 @@ class TestGetUser(object):
 
 
 def _assert_in_body(string, response):
-    if six.PY2:
-        assert string in response.body.decode('utf8')
-    else:
-        assert string in response.body
+    assert string in response.body
 
 
 def _assert_login_page_displayed(response):
@@ -82,8 +78,8 @@ def _assert_login_page_displayed(response):
 #     reset_form = response.forms[1]
 #     assert reset_form.action == url_for('emailasusername.request_reset')
 
-@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
-@pytest.mark.usefixtures(u'mail_server')
+@pytest.mark.usefixtures('clean_db', 'with_plugins')
+@pytest.mark.usefixtures('mail_server')
 class TestRequestResetFunctional(object):
 
     @mock.patch('ckanext.emailasusername.blueprint.mailer.send_reset_link')
