@@ -69,9 +69,9 @@ Ensure you have read and completed step 4 of the *Installation* section above.  
 
 The plugin also offers the following default configuration settings that can be changed in your ``ckan.ini`` config file:
 
-    emailasusername.search_by_username_and_email = True
+    ckanext.emailasusername.search_by_username_and_email = True
 
-ALtering this config parameter will allow users to search for other users by entering an email address, wherever the ``user_autocomplete`` action is called. For security reasons the entire email address is required to match the user account (otherwise the feature could be used to infer the email addresses of other users).  This may be useful, for example, when org admins are adding a new member to their org and do not know the username of the user they wish to add.
+ALtering this config parameter will allow users to search for other users by entering an email address, wherever the ``user_autocomplete`` action is called. For security reasons all users except sysadmins must enter the entire email address in order to match the user account (otherwise the feature could be used to infer the email addresses of other users).  This may be useful, for example, when org admins are adding a new member to their org and do not know the username of the user they wish to add.
 
     ckanext.emailasusername.auto_generate_username_from_email = False
     
