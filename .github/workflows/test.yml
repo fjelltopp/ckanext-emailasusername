@@ -6,7 +6,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        python-version: [ 2.7, 3.9 ]
+        python-version: [ 3.9 ]
     steps:
       - uses: actions/checkout@v2
       - uses: actions/setup-python@v2
@@ -24,9 +24,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - ckan-container-version: "2.9-py2"
-            ckan-postgres-version: "2.9"
-            ckan-solr-version: "2.9-solr8"
           - ckan-container-version: "2.9"
             ckan-postgres-version: "2.9"
             ckan-solr-version: "2.9-solr8"
