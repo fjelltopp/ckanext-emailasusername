@@ -20,10 +20,7 @@ def get_validator_names(validator_list):
     return list(map(lambda f: f.__name__, validator_list))
 
 
-@pytest.mark.usefixtures(u'clean_db')
-@pytest.mark.ckan_config(u'ckan.plugins', u'emailasusername')
-@pytest.mark.usefixtures(u'with_plugins')
-@pytest.mark.usefixtures(u'with_request_context')
+@pytest.mark.usefixtures('clean_db', 'with_plugins')
 class TestEmails(object):
 
     def test_user_emails_match(self):
@@ -131,7 +128,7 @@ class TestEmails(object):
     def test_default_config_email_input_confirmation_value(self):
         assert config_require_user_email_input_confirmation()
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.require_user_email_input_confirmation', False)
+    @pytest.mark.ckan_config('ckanext.emailasusername.require_user_email_input_confirmation', False)
     def test_config_email_input_confirmation_value_when_false(self):
         assert not config_require_user_email_input_confirmation()
 
@@ -139,12 +136,12 @@ class TestEmails(object):
         response = app.get(url_for('user.register'))
         assert 'email2' in response.body
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.require_user_email_input_confirmation', False)
+    @pytest.mark.ckan_config('ckanext.emailasusername.require_user_email_input_confirmation', False)
     def test_user_registration_form_not_requiring_email_confirmation(self, app):
         response = app.get(url_for('user.register'))
         assert 'email2' not in response.body
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.require_user_email_input_confirmation', False)
+    @pytest.mark.ckan_config('ckanext.emailasusername.require_user_email_input_confirmation', False)
     def test_emailasusername_new_user_schema_when_email_confirmation_is_not_required(self):
         schema = ckan.logic.schema.user_new_form_schema()
         assert 'email2' not in schema
