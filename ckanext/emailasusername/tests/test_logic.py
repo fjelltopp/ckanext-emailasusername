@@ -25,46 +25,46 @@ def identity():
     return identity
 
 
-@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
+@pytest.mark.usefixtures('clean_db', 'with_plugins')
 class TestSearchUsersByEmail(object):
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'false')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'false')
     def test_search_by_email_without_config(self, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'])
         assert not response
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'True')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'True')
     def test_search_by_full_email(self, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'])
         assert len(response) == 1
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'True')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'True')
     def test_search_by_full_email_case_insensitive(self, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'].upper())
         assert len(response) == 1
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'True')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'True')
     def test_search_by_partial_email_sysadmin(self, sysadmin_context, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='test@ckan')
         assert len(response) == 1
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'True')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'True')
     def test_search_by_partial_email_sysadmin_case_insensitive(self, sysadmin_context, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='test@ckan'.upper())
         assert len(response) == 1
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'True')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'True')
     def test_search_by_nonexisting_email_sysadmin(self, sysadmin_context, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', sysadmin_context, q='tast@ckan.org')
         assert not response
 
-    @pytest.mark.ckan_config(u'ckanext.emailasusername.search_by_username_and_email', u'True')
+    @pytest.mark.ckan_config('ckanext.emailasusername.search_by_username_and_email', 'True')
     def test_search_by_partial_email(self, identity):
         ckan.tests.factories.User(**identity)
         response = ckan.tests.helpers.call_action('user_autocomplete', {}, q=identity['email'][:-1])
@@ -73,8 +73,8 @@ class TestSearchUsersByEmail(object):
 
 @pytest.mark.usefixtures('clean_db', 'with_plugins')
 @pytest.mark.ckan_config(
-    u'ckanext.emailasusername.auto_generate_username_from_email',
-    u'true'
+    'ckanext.emailasusername.auto_generate_username_from_email',
+    'true'
 )
 class TestUsernameCreate():
 
@@ -95,7 +95,7 @@ class TestUsernameCreate():
         ('faulty-address@fault@address.org', 'faulty-address-2222')
     ])
     @mock.patch(
-        u'ckanext.emailasusername.logic.random.SystemRandom.random',
+        'ckanext.emailasusername.logic.random.SystemRandom.random',
         return_value=0.2222
     )
     def test_username_generation(self, random_patch, email, expected_username):
@@ -103,7 +103,7 @@ class TestUsernameCreate():
         assert result == expected_username
 
     @mock.patch(
-        u'ckanext.emailasusername.logic.random.SystemRandom.random',
+        'ckanext.emailasusername.logic.random.SystemRandom.random',
         return_value=0.2222
     )
     def test_simple_email(self, random_patch):

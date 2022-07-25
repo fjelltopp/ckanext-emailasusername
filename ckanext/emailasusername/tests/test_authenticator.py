@@ -8,8 +8,8 @@ import mock
 from ckan.logic import ValidationError
 
 
-@pytest.mark.usefixtures(u'clean_db', 'with_plugins')
-@pytest.mark.usefixtures(u'mail_server')
+@pytest.mark.usefixtures('clean_db', 'with_plugins')
+@pytest.mark.usefixtures('mail_server')
 class TestAuthenticator(object):
 
     @mock.patch('ckanext.emailasusername.blueprint.h.flash_error')
@@ -54,7 +54,7 @@ class TestAuthenticator(object):
             flash_mock.assert_not_called()
         except ValidationError as e:
             # CKAN 2.9 does not allow users to have identical emails
-            assert e.error_summary['Email'] == u'The email address \'{}\' belongs to a registered user.'.format(email)
+            assert e.error_summary['Email'] == 'The email address \'{}\' belongs to a registered user.'.format(email)
 
         # Test that an incorrect password fails login
         identity['password'] += '!'

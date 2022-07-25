@@ -1,6 +1,5 @@
 # encoding: utf-8
 import logging
-from six import text_type
 import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic.schema as schema
@@ -63,7 +62,7 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
 @schema.validator_args
 def emailasusername_new_user_schema(
-        unicode_safe, user_both_passwords_entered,
+        unicode_safe, unicode_only, user_both_passwords_entered,
         user_password_validator, user_passwords_match, email_exists,
         not_empty, email_validator):
     emailasusername_schema = schema.default_user_schema()
@@ -71,11 +70,11 @@ def emailasusername_new_user_schema(
         not_empty, unicode_safe
     ]
     emailasusername_schema['password1'] = [
-        text_type, user_both_passwords_entered,
+        unicode_only, user_both_passwords_entered,
         user_password_validator, user_passwords_match
     ]
     emailasusername_schema['password2'] = [
-        text_type
+        unicode_only
     ]
     emailasusername_schema['email'] = [unicode_safe, email_validator]
     emailasusername_schema['email1'] = [

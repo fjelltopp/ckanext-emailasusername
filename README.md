@@ -23,7 +23,7 @@ instead. It's recommended, if feasible, to work with your userbase to phase
 out multiple accounts with the same email.
 
 # Requirements
-This extension is tested with CKAN 2.9 for both python2 and python3.
+This extension is tested with CKAN 2.9 for python3 only.
 
 
 # Installation
