@@ -4,7 +4,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic.schema as schema
 from ckan.lib.plugins import DefaultTranslation
-from ckan.model import User
+import ckan.model as model
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
 from ckanext.emailasusername.logic import (
@@ -89,12 +89,16 @@ def emailasusername_new_user_schema(
 
 
 def email_exists(key, data, errors, context):
-    result = User.by_email(data[key])
-    if result:
-        errors[('email',)] = errors.get(key, [])
-        errors[('email',)] = [
-            _('An account is already registered to that email.')
+    if data.get(('state',)) != model.State.DELETED:
+        accounts_matching_email = model.User.by_email(data[key])
+        undeleted_matching_accounts = [
+            a for a in accounts_matching_email if a.state != model.State.DELETED
         ]
+        if undeleted_matching_accounts:
+            errors[('email',)] = errors.get(key, [])
+            errors[('email',)] = [
+                _('An account is already registered to that email.')
+            ]
 
 
 def user_both_emails_entered(key, data, errors, context):
