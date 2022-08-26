@@ -2,7 +2,7 @@
 import ckan.plugins
 import ckan.model
 import ckan.logic.schema
-import ckan.tests.factories
+from ckan.tests.factories import User
 import ckan.tests.helpers
 from ckan.lib.helpers import url_for
 import ckanext.emailasusername.plugin as plugin
@@ -92,13 +92,48 @@ class TestEmails(object):
 
         # Test email exists validator for invalid data
         # i.e. a pre-existing account already exists with the given email
-        test_user_dict = ckan.tests.factories.User(
+        test_user_dict = User(
             name='tester1',
             email='test@ckan.org'
         )
         data = {('email',): test_user_dict['email']}
         plugin.email_exists(key, data, errors, context)
         assert len(errors[('email',)]) == 1
+
+    def test_email_exists_for_deleted_account(self):
+        # Test email exists validator for invalid data
+        # i.e. a pre-existing account already exists with the given email
+        test_user_dict = User(
+            name='tester1',
+            email='test@ckan.org',
+            state='deleted'
+        )
+
+        # Test email exists validator for valid data
+        key = ('email',)
+        data = {('email',): test_user_dict['email']}
+        errors = {('email',): []}
+        context = {}
+
+        plugin.email_exists(key, data, errors, context)
+        assert len(errors[('email',)]) == 0
+
+    def test_email_exists_for_updating_deleted_account(self):
+        # Test email exists validator for invalid data
+        # i.e. a pre-existing account already exists with the given email
+        test_user_dict = User(
+            name='tester1',
+            email='test@ckan.org'
+        )
+
+        # Test email exists validator for valid data
+        key = ('email',)
+        data = {('email',): test_user_dict['email'], ('state',): ckan.model.State.DELETED}
+        errors = {('email',): []}
+        context = {}
+
+        plugin.email_exists(key, data, errors, context)
+        assert len(errors[('email',)]) == 0
 
     def test_emailasusername_new_user_schema(self):
         schema = ckan.logic.schema.user_new_form_schema()
