@@ -4,7 +4,7 @@ import ckan.plugins as plugins
 import ckan.plugins.toolkit as toolkit
 import ckan.logic.schema as schema
 from ckan.lib.plugins import DefaultTranslation
-from ckan.model import User
+import ckan.model as model
 from ckan.common import _
 from ckanext.emailasusername.blueprint import emailasusername
 from ckanext.emailasusername.logic import (
@@ -30,11 +30,11 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
         toolkit.add_resource('fanstatic', 'emailasusername')
-        schema.user_new_form_schema = emailasusername_new_user_schema
+        schema.user_new_form_schema = emailasusername_user_new_form_schema
 
     def get_validators(self):
         return {
-            'email_exists': email_exists,
+            'email_is_unique': email_is_unique,
             'user_both_emails_entered': user_both_emails_entered,
             'user_emails_match': user_emails_match
         }
@@ -61,9 +61,9 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
 
 
 @schema.validator_args
-def emailasusername_new_user_schema(
+def emailasusername_user_new_form_schema(
         unicode_safe, unicode_only, user_both_passwords_entered,
-        user_password_validator, user_passwords_match, email_exists,
+        user_password_validator, user_passwords_match, email_is_unique,
         not_empty, email_validator):
     emailasusername_schema = schema.default_user_schema()
     emailasusername_schema['fullname'] = [
@@ -78,7 +78,7 @@ def emailasusername_new_user_schema(
     ]
     emailasusername_schema['email'] = [unicode_safe, email_validator]
     emailasusername_schema['email1'] = [
-        not_empty, unicode_safe, email_validator, email_exists
+        not_empty, unicode_safe, email_validator, email_is_unique
     ]
     if helpers.config_require_user_email_input_confirmation():
         emailasusername_schema['email1'] += [
@@ -88,13 +88,25 @@ def emailasusername_new_user_schema(
     return emailasusername_schema
 
 
-def email_exists(key, data, errors, context):
-    result = User.by_email(data[key])
-    if result:
-        errors[('email',)] = errors.get(key, [])
-        errors[('email',)] = [
-            _('An account is already registered to that email.')
+def email_is_unique(key, data, errors, context):
+    if data.get(('state',)) != model.State.DELETED:
+
+        def is_me(user):
+            # Core logic taken from ckan.logic.validators.email_is_unique
+            return (user.name in (data.get(("name",)), data.get(("id",)))
+                    or user.id == data.get(("id",)))
+
+        users_matching_email = model.User.by_email(data[key])
+        undeleted_users_matching_email = [
+            a for a in users_matching_email if a.state != model.State.DELETED
         ]
+        undeleted_users_matching_email_not_including_me = [
+            a for a in undeleted_users_matching_email if not is_me(a)
+        ]
+        if undeleted_users_matching_email_not_including_me:
+            raise toolkit.Invalid(
+                _('An account is already registered to that email.')
+            )
 
 
 def user_both_emails_entered(key, data, errors, context):

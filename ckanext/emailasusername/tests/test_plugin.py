@@ -1,14 +1,15 @@
 """Tests for plugin.py."""
-import ckan.plugins
+from ckan.plugins import toolkit
 import ckan.model
 import ckan.logic.schema
-import ckan.tests.factories
+from ckan.tests.factories import User
 import ckan.tests.helpers
 from ckan.lib.helpers import url_for
 import ckanext.emailasusername.plugin as plugin
 from ckanext.emailasusername.helpers import (
     config_require_user_email_input_confirmation
 )
+from contextlib import nullcontext as does_not_raise
 import logging
 import pytest
 
@@ -81,24 +82,47 @@ class TestEmails(object):
         plugin.user_both_emails_entered(key, data, errors, context)
         assert len(errors[('email',)]) == 1
 
-    def test_email_exists(self):
-        # Test email exists validator for valid data
-        key = ('email',)
-        data = {('email',): 'test@ckan.org'}
-        errors = {('email',): []}
-        context = {}
-        plugin.email_exists(key, data, errors, context)
-        assert errors, {('email',): []}
-
-        # Test email exists validator for invalid data
-        # i.e. a pre-existing account already exists with the given email
-        test_user_dict = ckan.tests.factories.User(
-            name='tester1',
-            email='test@ckan.org'
+    @pytest.mark.parametrize("existing_user, data, result", [
+        (
+            None,
+            {('email',): 'test@ckan.org'},
+            does_not_raise()
+        ), (
+            {'email': 'test@ckan.org'},
+            {('email',): 'test@ckan.org'},
+            pytest.raises(toolkit.Invalid)
+        ), (
+            {'email': 'test@ckan.org', 'state': 'deleted'},
+            {('email',): 'test@ckan.org'},
+            does_not_raise()
+        ), (
+            {'email': 'test@ckan.org', 'state': 'deleted', 'name': 'tester1'},
+            {('email',): 'test@ckan.org', 'state': 'active', ('name',): 'tester1'},
+            does_not_raise()
+        ), (
+            {'email': 'test@ckan.org', 'name': 'tester1'},
+            {('email',): 'test@ckan.org', ('name',): 'tester1'},
+            does_not_raise()
+        ), (
+            {'email': 'test@ckan.org', 'name': 'tester1'},
+            {('email',): 'test@ckan.org', ('name',): 'tester2'},
+            pytest.raises(toolkit.Invalid)
         )
-        data = {('email',): test_user_dict['email']}
-        plugin.email_exists(key, data, errors, context)
-        assert len(errors[('email',)]) == 1
+    ], ids=[
+        "creating user with a unique email address",
+        "creating user with an existing email address",
+        "creating user with an email address used by deleted user",
+        "updating user state to active",
+        "updating user without changing the email address",
+        "updating user with an existing email address"
+    ])
+    def test_email_is_unique(self, existing_user, data, result):
+
+        if existing_user:
+            User(**existing_user)
+
+        with result:
+            plugin.email_is_unique(('email',), data, {('email',): []}, {})
 
     def test_emailasusername_new_user_schema(self):
         schema = ckan.logic.schema.user_new_form_schema()
