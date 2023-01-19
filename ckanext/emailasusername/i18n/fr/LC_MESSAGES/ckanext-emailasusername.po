@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: ckanext-emailasusername 0.0.1\n"
 "Report-Msgid-Bugs-To: EMAIL@ADDRESS\n"
-"POT-Creation-Date: 2022-01-11 08:51+0000\n"
+"POT-Creation-Date: 2023-01-03 12:08+0000\n"
 "PO-Revision-Date: 2020-12-14 11:47+0300\n"
 "Last-Translator: \n"
 "Language: fr\n"
@@ -22,7 +22,9 @@ msgstr ""
 
 #: ckanext/emailasusername/blueprint.py:34
 msgid "Multiple users with email {}, please specify your username instead"
-msgstr "Plusieurs utilisateurs possèdent l’adresse e-mail {}, veuillez indiquer votre nom d'utilisateur à la place"
+msgstr ""
+"Plusieurs utilisateurs possèdent l’adresse e-mail {}, veuillez indiquer "
+"votre nom d'utilisateur à la place"
 
 #: ckanext/emailasusername/blueprint.py:41
 msgid "No such user: {}"
@@ -30,23 +32,29 @@ msgstr "Aucun utilisateur ne correspond : {}"
 
 #: ckanext/emailasusername/blueprint.py:51
 msgid "Please check your inbox for a reset code."
-msgstr "Veuillez vérifier votre boîte de réception pour obtenir un code de réinitialisation."
+msgstr ""
+"Veuillez vérifier votre boîte de réception pour obtenir un code de "
+"réinitialisation."
 
 #: ckanext/emailasusername/blueprint.py:54
 msgid "Could not send reset link: {}"
 msgstr "Impossible d’envoyer de lien de réinitialisation : {}"
 
-#: ckanext/emailasusername/plugin.py:93
-msgid "An account is already registered to that email."
-msgstr "Un compte est déjà enregistré à cet e-mail."
+#: ckanext/emailasusername/logic.py:88
+msgid "Must specify either a name or an email"
+msgstr "Veuillez spécifiez un nom ou une adresse e-mail"
 
-#: ckanext/emailasusername/plugin.py:103
+#: ckanext/emailasusername/plugin.py:108
+msgid "An account is already registered to that email."
+msgstr "Un compte est déjà enregistré avec cet e-mail."
+
+#: ckanext/emailasusername/plugin.py:118
 msgid "Please enter your email in both email fields"
 msgstr "Veuillez saisir votre e-mail dans les deux champs"
 
-#: ckanext/emailasusername/plugin.py:112
+#: ckanext/emailasusername/plugin.py:127
 msgid "You did not retype your email correctly"
-msgstr "Vous n'avez pas retapé votre e-mail correctement"
+msgstr "Vous n'avez pas resaisi votre e-mail correctement"
 
 #: ckanext/emailasusername/templates/user/new_user_form.html:9
 #: ckanext/emailasusername/templates/user/new_user_form.html:15
@@ -113,12 +121,14 @@ msgid ""
 "Enter your username or email into the box and we will send you an email "
 "with a link to enter a new password."
 msgstr ""
-"Entrez votre nom d'utilisateur ou votre e-mail dans la case et nous vous enverrons un e-mail avec un lien pour entrer un nouveau mot de passe."
+"Entrez votre nom d'utilisateur ou votre e-mail dans la case et nous vous "
+"enverrons un e-mail avec un lien pour entrer un nouveau mot de passe."
 
 #: ckanext/emailasusername/templates/user/snippets/login_form.html:24
 msgid "Remember me"
-msgstr "Enregistrer les informations de connexion pour la prochaine fois"
+msgstr "Se souvenir de moi"
 
 #: ckanext/emailasusername/templates/user/snippets/login_form.html:28
 msgid "Login"
 msgstr "S'identifier"
+
