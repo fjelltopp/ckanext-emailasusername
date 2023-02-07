@@ -15,9 +15,9 @@ setup(
     # Versions should comply with PEP440.  For a discussion on single-sourcing
     # the version across setup.py and the project code, see
     # http://packaging.python.org/en/latest/tutorial.html#version
-    version='1.1.0',
+    version='1.2.1',
     # python 3.6+
-    python_requires='>=3.6.*',
+    python_requires='>=3.6',
     description='''Allows users to login with email as well as username.''',
     long_description=long_description,
     long_description_content_type='text/markdown',
