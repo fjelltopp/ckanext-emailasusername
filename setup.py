@@ -17,7 +17,7 @@ setup(
     # http://packaging.python.org/en/latest/tutorial.html#version
     version='1.1.0',
     # python 3.6+
-    python_requires='>=3.6.*',
+    python_requires='>=3.6.0',
     description='''Allows users to login with email as well as username.''',
     long_description=long_description,
     long_description_content_type='text/markdown',
