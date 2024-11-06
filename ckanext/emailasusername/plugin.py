@@ -29,7 +29,7 @@ class EmailasusernamePlugin(plugins.SingletonPlugin, DefaultTranslation):
     def update_config(self, config_):
         toolkit.add_template_directory(config_, 'templates')
         toolkit.add_public_directory(config_, 'public')
-        toolkit.add_resource('fanstatic', 'emailasusername')
+        # toolkit.add_resource('fanstatic', 'emailasusername')
         schema.user_new_form_schema = emailasusername_user_new_form_schema
 
     def get_validators(self):
@@ -97,6 +97,13 @@ def email_is_unique(key, data, errors, context):
                     or user.id == data.get(("id",)))
 
         users_matching_email = model.User.by_email(data[key])
+        
+        if not users_matching_email:
+            return
+
+        if type(users_matching_email) is not list:
+            users_matching_email = [users_matching_email]
+
         undeleted_users_matching_email = [
             a for a in users_matching_email if a.state != model.State.DELETED
         ]
