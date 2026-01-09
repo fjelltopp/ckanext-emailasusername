@@ -156,11 +156,13 @@ class TestEmails(object):
     def test_config_email_input_confirmation_value_when_false(self):
         assert not config_require_user_email_input_confirmation()
 
+    @pytest.mark.ckan_config('ckan.auth.create_user_via_web', True)
     def test_user_registration_form_defaults_to_requiring_email_confirmation(self, app):
         response = app.get(url_for('user.register'))
         assert 'email2' in response.body
 
     @pytest.mark.ckan_config('ckanext.emailasusername.require_user_email_input_confirmation', False)
+    @pytest.mark.ckan_config('ckan.auth.create_user_via_web', True)
     def test_user_registration_form_not_requiring_email_confirmation(self, app):
         response = app.get(url_for('user.register'))
         assert 'email2' not in response.body

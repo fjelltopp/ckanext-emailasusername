@@ -97,12 +97,20 @@ def email_is_unique(key, data, errors, context):
                     or user.id == data.get(("id",)))
 
         users_matching_email = model.User.by_email(data[key])
-        # In CKAN 2.11.4, by_email() may return None instead of empty list
+        # In CKAN 2.11, by_email() returns a single User object or None instead of a list
         if users_matching_email is None:
-            users_matching_email = []
-        undeleted_users_matching_email = [
-            a for a in users_matching_email if a.state != model.State.DELETED
-        ]
+            return
+        
+        if isinstance(users_matching_email, list):
+            undeleted_users_matching_email = [
+                a for a in users_matching_email if a.state != model.State.DELETED
+            ]
+        else:
+            if users_matching_email.state == model.State.DELETED:
+                undeleted_users_matching_email = []
+            else:
+                undeleted_users_matching_email = [users_matching_email]
+        
         undeleted_users_matching_email_not_including_me = [
             a for a in undeleted_users_matching_email if not is_me(a)
         ]

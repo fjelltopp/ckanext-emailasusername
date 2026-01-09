@@ -32,7 +32,7 @@ class EmailAsUsernameAuthenticator(object):
 
         if user is None:
             log.debug('Login failed - {} not found'.format(login))
-        elif not user.is_active():
+        elif not (user.is_active() if callable(user.is_active) else user.is_active):
             log.debug('Login as {} failed - user isn\'t active'.format(login))
         elif not user.validate_password(identity['password']):
             log.debug('Login as {} failed - password not valid'.format(login))
