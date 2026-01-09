@@ -26,12 +26,12 @@ def user_by_username_or_email(login, flash_errors=True):
             if flash_errors:
                 h.flash_error(_('No such user: {}').format(login))
             return None
-        
+
         if isinstance(user_obj, list):
             def not_deleted(user):
                 return getattr(user, 'state') != 'deleted'
             user_list = list(filter(not_deleted, user_obj))
-            
+
             if len(user_list) == 1:
                 return user_list[0]
             elif len(user_list) > 1:
