@@ -20,26 +20,40 @@ def user_by_username_or_email(login, flash_errors=True):
     if user:
         return user
     else:
-        def not_deleted(user):
-            return getattr(user, 'state') != 'deleted'
-        user_list = User.by_email(login)
-        user_list = list(filter(not_deleted, user_list))
-
-        if len(user_list) == 1:
-            return user_list[0]
-        elif len(user_list) > 1:
-            log.debug("Multiple users with email address: {}".format(login))
-            if flash_errors:
-                h.flash_error(
-                    _('Multiple users with email {}, '
-                      'please specify your username instead').format(login)
-                )
-            return None
-        else:
+        user_obj = User.by_email(login)
+        if user_obj is None:
             log.debug('No such user: {}'.format(login))
             if flash_errors:
                 h.flash_error(_('No such user: {}').format(login))
             return None
+
+        if isinstance(user_obj, list):
+            def not_deleted(user):
+                return getattr(user, 'state') != 'deleted'
+            user_list = list(filter(not_deleted, user_obj))
+
+            if len(user_list) == 1:
+                return user_list[0]
+            elif len(user_list) > 1:
+                log.debug("Multiple users with email address: {}".format(login))
+                if flash_errors:
+                    h.flash_error(
+                        _('Multiple users with email {}, '
+                          'please specify your username instead').format(login)
+                    )
+                return None
+            else:
+                log.debug('No such user: {}'.format(login))
+                if flash_errors:
+                    h.flash_error(_('No such user: {}').format(login))
+                return None
+        else:
+            if getattr(user_obj, 'state') == 'deleted':
+                log.debug('No such user: {}'.format(login))
+                if flash_errors:
+                    h.flash_error(_('No such user: {}').format(login))
+                return None
+            return user_obj
 
 
 def request_reset():

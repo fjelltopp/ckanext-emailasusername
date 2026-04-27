@@ -2,3 +2,4 @@ ckantoolkit==0.0.4
 pytest-ckan
 pytest-cov
 mock
+repoze.who
